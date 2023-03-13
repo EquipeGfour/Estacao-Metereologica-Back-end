@@ -1,6 +1,7 @@
 import { Sequelize } from "sequelize";
 import * as dotenv from "dotenv";
 
+dotenv.config()
 
 const USER = process.env.USER || "root"
 const PASSWORD = process.env.PASSWORD || ""
