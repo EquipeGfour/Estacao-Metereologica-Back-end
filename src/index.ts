@@ -16,4 +16,4 @@ db.initialize().then(()=> {
 const PORT = process.env.PORT || 3000;
 
 
-app.listen(PORT, () => console.log(`Servidor rodando na ${PORT}`));
+app.listen(PORT, () => console.log(`Servidor está rodando na ${PORT}`));
