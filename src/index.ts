@@ -6,13 +6,12 @@ dotenv.config();
 
 const app = express();
 app.use(express.json())
-try {
-    db.authenticate().then(()=> {
-        console.log("Banco de Dados conectado");
-    })
-} catch (error) {
+
+db.initialize().then(()=> {
+    console.log("Banco de Dados conectado");
+}). catch ((error)=>{
     console.error('Banco de dados não conectado, erro:', error)
-}
+})
 
 const PORT = process.env.PORT || 3000;
 
