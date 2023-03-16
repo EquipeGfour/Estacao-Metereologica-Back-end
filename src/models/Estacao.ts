@@ -12,10 +12,10 @@ class Estacao{
     data_criacao!:Date
 
     @Column()
-    latitude!:number
+    latitude!:string
 
     @Column()
-    longitude!:number
+    longitude!:string
 
     @Column()
     utc!: Date

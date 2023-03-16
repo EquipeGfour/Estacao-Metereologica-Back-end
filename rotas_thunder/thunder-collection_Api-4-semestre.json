@@ -1,0 +1,64 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "Api-4-semestre",
+    "dateExported": "2023-03-16T19:52:46.412Z",
+    "version": "1.1",
+    "folders": [
+        {
+            "_id": "2e527001-f885-4880-971b-11292169b0cb",
+            "name": "Estacao",
+            "containerId": "",
+            "created": "2023-03-16T19:27:39.777Z",
+            "sortNum": 10000
+        }
+    ],
+    "requests": [
+        {
+            "_id": "8db459c5-037e-4f43-aa70-b10ca2dc1acf",
+            "colId": "864193a8-78d9-4794-8baa-d1d28d7584bd",
+            "containerId": "2e527001-f885-4880-971b-11292169b0cb",
+            "name": "Cadastrar estação",
+            "url": "http://localhost:3000/estacao/cadastrar",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2023-03-16T19:28:21.183Z",
+            "modified": "2023-03-16T19:33:19.658Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"nome\": \"estacao_teste_1\",\n  \"data_criacao\": \"2023-03-16T17:30:00.000Z\",\n  \"latitude\": \"-23.155001\",\n  \"longitude\": \"-45.790329\",\n  \"utc\": \"2023-03-16T17:30:00.000Z\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "f9114a9a-1c6f-45b5-95f7-791cca4718b7",
+            "colId": "864193a8-78d9-4794-8baa-d1d28d7584bd",
+            "containerId": "2e527001-f885-4880-971b-11292169b0cb",
+            "name": "Buscar estações",
+            "url": "http://localhost:3000/estacao/buscar",
+            "method": "GET",
+            "sortNum": 20000,
+            "created": "2023-03-16T19:33:47.219Z",
+            "modified": "2023-03-16T19:33:47.220Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "9a415c83-51a6-4fc6-b814-aabd9c6baa3c",
+            "colId": "864193a8-78d9-4794-8baa-d1d28d7584bd",
+            "containerId": "2e527001-f885-4880-971b-11292169b0cb",
+            "name": "Excluir estação",
+            "url": "localhost:3000/estacao/excluir/1",
+            "method": "DELETE",
+            "sortNum": 30000,
+            "created": "2023-03-16T19:52:17.564Z",
+            "modified": "2023-03-16T19:52:17.564Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        }
+    ]
+}
