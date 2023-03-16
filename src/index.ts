@@ -1,7 +1,7 @@
 import express from "express";
 import * as dotenv from "dotenv";
 import db from "./config/db";
-import estacaoRouter from "./routes/EstacaoRouter"
+import routes from "./routes";
 
 dotenv.config();
 
@@ -17,6 +17,6 @@ db.initialize().then(async(connection)=> {
 
 const PORT = process.env.PORT || 3000;
 
+app.use(routes);
 
 app.listen(PORT, () => console.log(`Rodando na Porta ${PORT}`));
-app.use(estacaoRouter);
