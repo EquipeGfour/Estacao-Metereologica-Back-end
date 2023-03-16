@@ -1,12 +1,13 @@
 import { DataSource } from "typeorm";
 import * as dotenv from "dotenv";
+import Estacao from "../models/Estacao";
 
-dotenv.config()
+dotenv.config();
 
-const USER = process.env.USER || "root"
-const PASSWORD = process.env.PASSWORD || ""
-const DATABASE = process.env.DATABASE || ""
-const HOST = process.env.HOST || "localhost"
+const USER = process.env.USER || "root";
+const PASSWORD = process.env.PASSWORD || "";
+const DATABASE = process.env.DATABASE || "";
+const HOST = process.env.HOST || "localhost";
 
 
 const db = new DataSource({
@@ -16,12 +17,12 @@ const db = new DataSource({
     port: 3306,
     username: USER,
     password:PASSWORD,
-    synchronize: false, 
+    synchronize: true, 
     logging: false,
-    entities: ["src/models/*.ts"],
+    entities: [Estacao],
     migrations: ["src/migrations/*.ts"],
     subscribers: [],
-    maxQueryExecutionTime: 2000 // 2 seg.
+    maxQueryExecutionTime: 2000
 });
 
-export default db
+export default db;
