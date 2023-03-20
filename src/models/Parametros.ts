@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate, ManyToMany, JoinTable } from "typeorm";
+import Estacao from "./Estacao";
 
 @Entity({name:'parametros'})
 class Parametros{
@@ -13,6 +14,7 @@ class Parametros{
 
     @Column()
     fator_conversao!:string
+    
 
     @Column()
     offset!:string

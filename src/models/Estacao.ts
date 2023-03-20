@@ -18,6 +18,10 @@ class Estacao{
     @Column()
     longitude!:string
 
+    @ManyToMany((type) => Parametros)
+    @JoinTable()
+    parametros!:Parametros[]
+
     @Column()
     utc!: Date
 };
