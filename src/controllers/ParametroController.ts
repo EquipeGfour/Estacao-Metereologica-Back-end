@@ -5,7 +5,8 @@ import Parametros from "../models/Parametros";
 class ParametrosController{
     public async buscarParametros(req: Request, res: Response){
         try{
-
+            const parametros = await db.getRepository(Parametros).find()
+            res.json(parametros);
         }catch(error){
             console.log(error);            
             res.status(500).json({ message: error });
@@ -14,7 +15,7 @@ class ParametrosController{
 
     public async buscarParametrosPorId(req: Request, res: Response){
         try{
-
+            const parametro = await db.getRepository(Parametros).findOneBy({id: Number(req.params.id)})
         }catch(error){
             console.log(error);            
             res.status(500).json({ message: error });
