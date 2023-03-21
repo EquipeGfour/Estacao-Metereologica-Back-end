@@ -24,7 +24,9 @@ class ParametrosController{
 
     public async CadastrarParametros(req: Request, res: Response){
         try{
-
+            const {tipo, unidade_medida, fator_conversao, offset} = req.body
+            const parametro = await db.getRepository(Parametros).create({tipo, unidade_medida, fator_conversao, offset});
+            await db.getRepository(Parametros).save(parametro);
         }catch(error){
             console.log(error);            
             res.status(500).json({ message: error });
