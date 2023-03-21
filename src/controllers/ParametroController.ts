@@ -35,7 +35,13 @@ class ParametrosController{
 
     public async ExcluirParametros(req: Request, res: Response){
         try{
-
+            const parametro = await db.getRepository(Parametros).findOneBy({id:Number(req.params.id)})
+            if(parametro){
+                await db.getRepository(Parametros).delete(parametro)
+                res.json(`Parâmetro de id ${parametro.id} excluida com sucesso !`)
+            }else{
+                res.json(`Parâmetro de ${req.params.id} não encontrada !`)
+            }
         }catch(error){
             console.log(error);            
             res.status(500).json({ message: error });
