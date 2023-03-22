@@ -2,6 +2,7 @@ import { DataSource } from "typeorm";
 import * as dotenv from "dotenv";
 import Estacao from "../models/Estacao";
 import Parametros from "../models/Parametros";
+import EstacaoHasParametros from "../models/EstacaoHasParametros";
 
 dotenv.config();
 
@@ -20,7 +21,7 @@ const db = new DataSource({
     password:PASSWORD,
     synchronize: true, 
     logging: false,
-    entities: [Estacao, Parametros],
+    entities: [Estacao, Parametros, EstacaoHasParametros],
     migrations: ["src/migrations/*.ts"],
     subscribers: [],
     maxQueryExecutionTime: 2000
