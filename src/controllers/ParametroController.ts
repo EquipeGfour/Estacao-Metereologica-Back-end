@@ -47,6 +47,33 @@ class ParametrosController{
             res.status(500).json({ message: error });
         }
     };
+
+    public async atualizarParametros(req:Request, res:Response){
+        try {
+            const {tipo, unidade_medida, fator_conversao, offset} = req.body
+            const parametros = await db.getRepository(Parametros).findOneBy({id:Number(req.params.id)})
+            if(parametros){
+                if (tipo !== '') {
+                    parametros.tipo = tipo;
+                }
+                if (unidade_medida !== '') {
+                    parametros.unidade_medida = unidade_medida;
+                }
+                if (fator_conversao !== '') {
+                    parametros.fator_conversao = fator_conversao;
+                }
+                if (offset !== '') {
+                    parametros.offset = offset;
+                }
+                const parametroEditado = await db.manager.save(Parametros, parametros)
+                res.json({message: 'Parametro Editado com sucesso'})
+            }else{
+                res.json('Parametro não encontrado')
+            }
+        } catch (error) {
+            res.status(500).json({ message: error});
+        }
+    }
 }
 
 export default new ParametrosController();

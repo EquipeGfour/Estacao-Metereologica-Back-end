@@ -14,7 +14,6 @@ class Parametros{
 
     @Column()
     fator_conversao!:string
-    
 
     @Column()
     offset!:string

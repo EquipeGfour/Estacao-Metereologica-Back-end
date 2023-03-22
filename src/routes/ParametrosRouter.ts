@@ -7,5 +7,6 @@ routes.get('/buscar-parametro', ParametroController.buscarParametros)
 routes.get('/buscar-parametro/:id', ParametroController.buscarParametrosPorId)
 routes.post('/cadastrar-parametro', ParametroController.CadastrarParametros)
 routes.delete('/excluir-parametro/:id', ParametroController.ExcluirParametros)
+routes.put('/atualizar-parametro/:id', ParametroController.atualizarParametros)
 
 export default routes;
