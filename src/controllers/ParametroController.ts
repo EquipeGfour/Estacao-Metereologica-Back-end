@@ -16,10 +16,15 @@ class ParametrosController{
     public async buscarParametrosPorId(req: Request, res: Response){
         try{
             const parametro = await db.getRepository(Parametros).findOneBy({id: Number(req.params.id)})
+            if (parametro){
+                res.json(parametro)
+            }else{
+                res.json(`Parâmetro não encontrado !`)        
+            }  
         }catch(error){
             console.log(error);            
             res.status(500).json({ message: error });
-        }
+        }        
     };
 
     public async CadastrarParametros(req: Request, res: Response){
