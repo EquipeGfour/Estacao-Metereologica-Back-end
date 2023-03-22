@@ -10,6 +10,7 @@ const USER = process.env.USER || "root";
 const PASSWORD = process.env.PASSWORD || "";
 const DATABASE = process.env.DATABASE || "";
 const HOST = process.env.HOST || "localhost";
+const DB_PORT = process.env.DB_PORT || 3306;
 
 
 const db = new DataSource({
