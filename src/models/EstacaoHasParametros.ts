@@ -5,7 +5,7 @@ import Parametros from "./Parametros";
 @Entity({name: "estacoes_has_parametros"})
 class EstacaoHasParametros{
     @PrimaryGeneratedColumn()
-    id!:number
+    id!:Number
 
     @ManyToOne((type => Estacao))
     @JoinColumn({
