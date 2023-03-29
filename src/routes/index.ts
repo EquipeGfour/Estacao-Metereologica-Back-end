@@ -1,10 +1,12 @@
 import { Router } from "express";
 import Estacao from "./EstacaoRouter"
 import Parametros from "./ParametrosRouter";
+import EHP from "./EhpRouter"
 
-const router = Router();
+const routes = Router();
 
-router.use('/estacao', Estacao);
-router.use('/parametro', Parametros)
+routes.use('/estacao', Estacao);
+routes.use('/parametro', Parametros);
+routes.use('/ehp', EHP)
 
-export default router;
+export default routes;

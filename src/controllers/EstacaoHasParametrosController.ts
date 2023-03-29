@@ -16,7 +16,7 @@ class EstacaoHasParametrosController{
 
     public async buscarEHP (req:Request, res: Response){
         try {
-            const ehp = await db.getRepository(EstacaoHasParametrosController).find();
+            const ehp = await db.getRepository(EstacaoHasParametros).find();
             res.json(ehp)
         } catch (error) {
             console.log(error);
@@ -26,7 +26,7 @@ class EstacaoHasParametrosController{
 
     public async buscarEHPID (req: Request, res: Response){
         try {
-            const ehp = await db.getRepository(EstacaoHasParametros).findOneBy({id: (req.params.id)})
+            const ehp = await db.getRepository(EstacaoHasParametros).findOneBy({id: Number(req.params.id)})
         } catch (error) {
             
         }
