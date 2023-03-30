@@ -32,8 +32,9 @@ class EstacaoController {
 
    public async cadastrarEstacao(req: Request, res: Response){
         try{
-            const { nome, data_criacao, latitude, longitude, utc } = req.body
-            const estacao = await db.getRepository(Estacao).create({ nome, data_criacao, latitude, longitude, utc });
+            const { nome, latitude, longitude, utc } = req.body
+            
+            const estacao = await db.getRepository(Estacao).create({ nome, latitude, longitude, utc });
             await db.getRepository(Estacao).save(estacao);
 
             res.json(estacao);

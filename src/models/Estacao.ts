@@ -4,22 +4,22 @@ import Parametros from "./Parametros";
 @Entity({name:'estacoes'})
 class Estacao{
     @PrimaryGeneratedColumn()
-    id!:number
+    id:number
 
     @Column()
-    nome!:string
+    nome:string
+
+    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', nullable:false })
+    data_criacao: Date;
 
     @Column()
-    data_criacao!:Date
+    latitude:string
 
     @Column()
-    latitude!:string
+    longitude:string
 
     @Column()
-    longitude!:string
-
-    @Column()
-    utc!: Date
+    utc: Date
 };
 
 
