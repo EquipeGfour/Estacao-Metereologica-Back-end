@@ -21,7 +21,7 @@ class EstacaoController {
             if (estacao) {
                res.json(estacao)
             }else{
-                res.json(`Estação não encontrada.`)
+                res.json(`Estação não encontrada.`);
             } 
         }catch(error){
             console.log(error);
