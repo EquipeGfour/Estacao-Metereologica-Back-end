@@ -19,18 +19,17 @@ class EstacaoController {
         try{
             const estacao = await db.getRepository(Estacao).findOneBy({id: Number(req.params.id)})
             if (estacao) {
-               res.json(estacao)
+                res.status(201).json(estacao)
             }else{
-                res.json(`Estação não encontrada.`);
+                res.status(404).json(`Estação não encontrada.`);
             } 
         }catch(error){
             console.log(error);
-            
             res.status(500).json({ message: error});
         }
     };
 
-   public async cadastrarEstacao(req: Request, res: Response){
+    public async cadastrarEstacao(req: Request, res: Response){
         try{
             const { nome, latitude, longitude, utc } = req.body
             
