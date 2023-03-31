@@ -4,19 +4,19 @@ import Estacao from "./Estacao";
 @Entity({name:'parametros'})
 class Parametros{
     @PrimaryGeneratedColumn()
-    id!:number
+    id:number
 
     @Column()
-    tipo!:string
+    tipo:string
 
     @Column()
-    unidade_medida!:string
+    unidade_medida:string
 
     @Column()
-    fator_conversao!:string
+    fator_conversao:string
 
     @Column()
-    offset!:string
+    offset:string
 }
 
 export default Parametros
