@@ -85,7 +85,7 @@ class EstacaoHasParametrosController {
                     }
                 },
                 relations: {
-                    estacao: true,
+                    estacao: false,
                     parametro: true
                 }
             });
@@ -107,7 +107,7 @@ class EstacaoHasParametrosController {
                 },
                 relations: {
                     estacao: true,
-                    parametro: true
+                    parametro: false
                 }
             });
 
