@@ -78,6 +78,7 @@ class EstacaoHasParametrosController {
     public async buscarParametrosDaEstacao(req: Request, res: Response) {
         try {
             const id_estacao = req.params.id
+            const estacao = await db.getRepository(Estacao).findOneBy({id: Number(req.params.id)});
             const dados = await db.getRepository(EstacaoHasParametros).find({
                 where: {
                     estacao: {
@@ -90,7 +91,7 @@ class EstacaoHasParametrosController {
                 }
             });
 
-            res.status(200).json(dados);
+            res.status(200).json({ estacao, dados });
         } catch (error) {
             res.status(500).json({ message: error });
         }
