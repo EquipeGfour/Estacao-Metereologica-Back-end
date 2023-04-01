@@ -5,104 +5,115 @@ import Estacao from "../models/Estacao";
 import Parametros from "../models/Parametros";
 
 
-class EstacaoHasParametrosController{
-    public async cadatrarEhp(req:Request , res: Response){
+class EstacaoHasParametrosController {
+    public async cadastrarEhp(req: Request, res: Response) {
+        const { id_estacao, id_parametros } = req.body;
+
         try {
-            const { id_estacao, id_parametro } = req.body;
-            const estacao = await db.getRepository(Estacao).findOne({ where: { id: Number(id_estacao) } })
-            const parametro = await db.getRepository(Parametros).findOne({ where: { id: Number(id_parametro) } })
+            const estacao = await db.getRepository(Estacao).findOne({ where: { id: id_estacao } });
 
             if (!estacao) {
                 return res.status(404).json({ message: 'Estação não encontrada.' });
             }
-            if (!parametro) {
-                return res.status(404).json({ message: 'Parâmetro não encontrado !' });
+
+            const parametros = await db.getRepository(Parametros).findByIds(id_parametros);
+            if (parametros.length !== id_parametros.length) {
+                return res.status(404).json({ message: 'Parâmetros não encontrados!' });
             }
 
-            const ehp = new EstacaoHasParametros();
-            ehp.estacao = estacao;
-            ehp.parametro = parametro;
-            const dado = await db.getRepository(EstacaoHasParametros).save(ehp);
-        
-            return res.status(201).json(dado);
+            const dados = [];
+
+            await db.transaction(async (transactionalEntityManager) => {
+                for (let id_parametro of id_parametros) {
+                    const parametro = parametros.find((p) => p.id === id_parametro);
+                    const ehp = new EstacaoHasParametros();
+                    ehp.estacao = estacao;
+                    ehp.parametro = parametro;
+                    const dado = await transactionalEntityManager.save(ehp);
+                    dados.push(dado);
+                }
+            });
+            return res.status(201).json({ message: 'Parâmetros cadastrados', dados });
         } catch (error) {
-            res.status(500).json({message: error});
+            console.error(error);
+            res.status(500).json({ message: error.message });
         }
     }
 
 
-    public async buscarEHP (req:Request, res: Response){
+    public async buscarEHP(req: Request, res: Response) {
         try {
             const estacoes = await db.getRepository(EstacaoHasParametros).find({
-                relations:{
-                    estacao:true,
+                relations: {
+                    estacao: true,
                     parametro: true
                 }
             });
             res.status(200).json(estacoes);
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({ message: error });
         }
     }
 
-    public async buscarEHPID (req: Request, res: Response){
+    public async buscarEHPID(req: Request, res: Response) {
         try {
-            const dados = await db.getRepository(EstacaoHasParametros).findOne({relations:{
-                estacao:true,
-                parametro: true
-            },
-            where:{id:Number(req.params.id)}
-        })
+            const dados = await db.getRepository(EstacaoHasParametros).findOne({
+                relations: {
+                    estacao: true,
+                    parametro: true
+                },
+                where: { id: Number(req.params.id) }
+            })
             if (dados) {
                 res.status(200).json(dados);
-            }else{
+            } else {
                 res.status(404).json(`Não encontrado.`);
-            } 
+            }
         } catch (error) {
-            res.status(500).json({message: error});
+            res.status(500).json({ message: error });
         }
     }
 
-    public async buscarParametrosDaEstacao(req: Request, res: Response){
-        try{
+    public async buscarParametrosDaEstacao(req: Request, res: Response) {
+        try {
             const id_estacao = req.params.id
             const dados = await db.getRepository(EstacaoHasParametros).find({
-                where:{
-                    estacao:{
+                where: {
+                    estacao: {
                         id: Number(id_estacao)
                     }
                 },
-                relations:{
-                    estacao:true,
-                    parametro:true
+                relations: {
+                    estacao: true,
+                    parametro: true
                 }
             });
 
             res.status(200).json(dados);
-        }catch(error){
-            res.status(500).json({message: error});
+        } catch (error) {
+            res.status(500).json({ message: error });
         }
     }
 
-    public async buscarEstacoesDeUmParametro(req: Request, res: Response){
-        try{
+    public async buscarEstacoesDeUmParametro(req: Request, res: Response) {
+        try {
             const id_parametro = req.params.id
             const dados = await db.getRepository(EstacaoHasParametros).find({
-                where:{
-                    parametro:{
+                where: {
+                    parametro: {
                         id: Number(id_parametro)
                     }
                 },
-                relations:{
-                    estacao:true,
-                    parametro:true
+                relations: {
+                    estacao: true,
+                    parametro: true
                 }
             });
 
             res.status(200).json(dados);
-        }catch(error){
-            res.status(500).json({message: error});
+        } catch (error) {
+            res.status(500).json({ message: error });
         }
     }
 }

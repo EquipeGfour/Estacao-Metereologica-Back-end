@@ -7,6 +7,6 @@ routes.get('/parametroEstacao', EstacaoHasParametrosController.buscarEHP);
 routes.get('/parametroEstacao/:id', EstacaoHasParametrosController.buscarEHPID);
 routes.get('/parametrosEstacao/:id', EstacaoHasParametrosController.buscarParametrosDaEstacao);
 routes.get('/estacoesParametro/:id', EstacaoHasParametrosController.buscarEstacoesDeUmParametro);
-routes.post('/cadastrar', EstacaoHasParametrosController.cadatrarEhp);
+routes.post('/cadastrar', EstacaoHasParametrosController.cadastrarEhp);
 
 export default routes;
