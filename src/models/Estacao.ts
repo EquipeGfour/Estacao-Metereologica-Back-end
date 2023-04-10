@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate , ManyToMany, JoinTable} from "typeorm";
-import Parametros from "./Parametros";
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+
 
 @Entity({name:'estacoes'})
 class Estacao{
