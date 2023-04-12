@@ -1,5 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import EstacaoHasParametros from "./EstacaoHasParametros";
+import Estacao from "./Estacao";
+import Parametros from "./Parametros";
 
 
 @Entity({name:'alertas'})
@@ -27,21 +29,17 @@ class Alerta{
     })
     id_estacao_has_parametros: EstacaoHasParametros
 
-    @ManyToOne((type) => EstacaoHasParametros)
+    @ManyToOne((type) => Estacao, (estacao) => estacao.id)
     @JoinColumn({
-        name:"id_estacao",
-        referencedColumnName:"estacao",
-        foreignKeyConstraintName:"fk_id_estacao"
+        name:"id_estacao"
     })
-    id_estacao: EstacaoHasParametros
+    id_estacao: Estacao
 
-    @ManyToOne((type) => EstacaoHasParametros)
+    @ManyToOne((type) => Parametros, (parametro) => parametro.id)
     @JoinColumn({
-        name:"id_parametro",
-        referencedColumnName:"parametro",
-        foreignKeyConstraintName:"fk_id_parametro"
+        name:"id_parametro"
     })
-    id_parametro: EstacaoHasParametros
+    id_parametro: Parametros
 }
 
 
