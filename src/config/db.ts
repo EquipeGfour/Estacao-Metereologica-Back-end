@@ -4,6 +4,7 @@ import Estacao from "../models/Estacao";
 import Parametros from "../models/Parametros";
 import EstacaoHasParametros from "../models/EstacaoHasParametros";
 import Alerta from "../models/Alerta";
+import Usuario from "../models/Usuario";
 
 
 dotenv.config();
@@ -24,7 +25,7 @@ const db = new DataSource({
     password:PASSWORD,
     synchronize: true, 
     logging: false,
-    entities: [Estacao, Parametros, EstacaoHasParametros, Alerta],
+    entities: [Estacao, Parametros, EstacaoHasParametros, Alerta, Usuario],
     migrations: ["src/migrations/*.ts"],
     subscribers: [],
     maxQueryExecutionTime: 2000
