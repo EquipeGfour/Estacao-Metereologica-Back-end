@@ -2,7 +2,7 @@ import db from "../config/db";
 import { Request, Response } from 'express';
 import EstacaoHasParametros from "../models/EstacaoHasParametros";
 import Estacao from "../models/Estacao";
-import Parametros from "../models/Parametros";
+import Parametros from "../models/Parametro";
 
 
 class EstacaoHasParametrosController {

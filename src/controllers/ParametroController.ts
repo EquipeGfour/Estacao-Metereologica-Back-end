@@ -1,6 +1,6 @@
 import db from "../config/db";
 import { Request, Response } from 'express';
-import Parametros from "../models/Parametros";
+import Parametros from "../models/Parametro";
 
 class ParametrosController{
     public async buscarParametros(req: Request, res: Response){

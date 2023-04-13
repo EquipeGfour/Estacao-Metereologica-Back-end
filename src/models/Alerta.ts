@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import EstacaoHasParametros from "./EstacaoHasParametros";
 import Estacao from "./Estacao";
-import Parametros from "./Parametros";
+import Parametros from "./Parametro";
 
 
 @Entity({name:'alertas'})
@@ -30,13 +30,13 @@ class Alerta{
     @JoinColumn({
         name:"id_estacao"
     })
-    id_estacao: Estacao
+    estacao: Estacao
 
     @ManyToOne((type) => Parametros, (parametro) => parametro.id)
     @JoinColumn({
         name:"id_parametro"
     })
-    id_parametro: Parametros
+    parametro: Parametros
 }
 
 

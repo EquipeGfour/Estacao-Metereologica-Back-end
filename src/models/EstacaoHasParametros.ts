@@ -1,6 +1,6 @@
 import { PrimaryGeneratedColumn, Column, Entity, JoinColumn, ManyToOne } from "typeorm";
 import Estacao from "./Estacao";
-import Parametros from "./Parametros";
+import Parametros from "./Parametro";
 
 @Entity({name: "estacoes_has_parametros"})
 class EstacaoHasParametros{

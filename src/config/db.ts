@@ -1,7 +1,7 @@
 import { DataSource } from "typeorm";
 import * as dotenv from "dotenv";
 import Estacao from "../models/Estacao";
-import Parametros from "../models/Parametros";
+import Parametros from "../models/Parametro";
 import EstacaoHasParametros from "../models/EstacaoHasParametros";
 import Alerta from "../models/Alerta";
 import Usuario from "../models/Usuario";

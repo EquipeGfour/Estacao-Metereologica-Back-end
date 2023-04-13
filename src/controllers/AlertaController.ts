@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import db from '../config/db';
 import Alerta from '../models/Alerta';
 import Estacao from '../models/Estacao';
-import Parametros from '../models/Parametros';
+import Parametros from '../models/Parametro';
 import EstacaoHasParametros from '../models/EstacaoHasParametros';
 
 
@@ -11,9 +11,9 @@ class AlertaController{
         try{
             const alertas = await db.getRepository(Alerta).find({
                 relations: {
-                    id_estacao:true,
+                    estacao:true,
                     id_estacao_has_parametros:true,
-                    id_parametro:true
+                    parametro:true
                 }
             });
             res.json(alertas);
@@ -30,9 +30,9 @@ class AlertaController{
                     id: id
                 },
                 relations:{
-                    id_estacao:true,
+                    estacao:true,
                     id_estacao_has_parametros:true,
-                    id_parametro:true
+                    parametro:true
                 }
             });
             if(!alerta){
@@ -68,8 +68,8 @@ class AlertaController{
                 alerta.nome = nome;
                 alerta.mensagem = mensagem;
                 alerta.condicao = condicao;
-                alerta.id_estacao = ehp.estacao;
-                alerta.id_parametro = ehp.parametro;
+                alerta.estacao = ehp.estacao;
+                alerta.parametro = ehp.parametro;
                 alerta.id_estacao_has_parametros = id_estacao_has_parametros
                 await transactionalEntityManager.save(alerta);
             })
@@ -89,9 +89,9 @@ class AlertaController{
                     id: id
                 },
                 relations:{
-                    id_estacao:true,
+                    estacao:true,
                     id_estacao_has_parametros:true,
-                    id_parametro:true
+                    parametro:true
                 }
             });
             if(!alerta){
