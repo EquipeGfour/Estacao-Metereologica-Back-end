@@ -38,7 +38,26 @@ class UsuarioController{
 
     public async editarUsuario(req: Request, res: Response){
         try{
-
+            const {nome, email, senha, tipo_usuario} = req.body
+            const usuario = await db.getRepository(Usuario).findOneBy({id: Number(req.params.id)})
+            if(usuario) {
+                if(nome !== ''){
+                    usuario.nome = nome;
+                }
+                if(email !== ''){
+                    usuario.email = email;
+                }
+                if (senha !== ''){
+                    usuario.senha = senha;
+                }
+                if (tipo_usuario !== ''){
+                    usuario.tipo_usuario = tipo_usuario
+                }
+                const usuarioEditado = await db.manager.save(Usuario, usuario)
+                res.json({message: 'Usuario editado com sucesso!', usuarioEditado})
+            }else{
+                res.json(`Usuario não encontrado.`)
+            }
         }catch(error){
             console.log(error);
             res.status(500).json({message: error});            
