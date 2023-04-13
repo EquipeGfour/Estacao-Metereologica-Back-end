@@ -48,7 +48,7 @@ class AlertaController{
     public async cadastrarAlerta(req:Request, res:Response){
         try{
             const {nome, mensagem, condicao, id_estacao_has_parametros} = req.body
-            const ehp = await db.getRepository(EstacaoHasParametros).find({
+            const ehp = await db.getRepository(EstacaoHasParametros).findOne({
                 where:{
                     id:id_estacao_has_parametros
                 },
@@ -61,21 +61,70 @@ class AlertaController{
                 res.status(404).json("Ligação não econtrada...");
             }
 
-            console.log(ehp)
+            
 
             const alerta = new Alerta();
             await db.transaction(async(transactionalEntityManager) => {
                 alerta.nome = nome;
                 alerta.mensagem = mensagem;
                 alerta.condicao = condicao;
-                alerta.id_estacao = ehp[0].estacao;
-                alerta.id_parametro = ehp[0].parametro;
+                alerta.id_estacao = ehp.estacao;
+                alerta.id_parametro = ehp.parametro;
                 alerta.id_estacao_has_parametros = id_estacao_has_parametros
                 await transactionalEntityManager.save(alerta);
             })
             res.json(alerta);
 
-        
+        }catch(error){
+            res.status(500).json({ message: error });
+        }
+    }
+
+    public async editarAlerta(req:Request, res:Response){
+        try{
+            const {nome, mensagem, condicao} = req.body;
+            const id = Number(req.params.id)
+            const alerta = await db.getRepository(Alerta).findOne({
+                where:{
+                    id: id
+                },
+                relations:{
+                    id_estacao:true,
+                    id_estacao_has_parametros:true,
+                    id_parametro:true
+                }
+            });
+            if(!alerta){
+                res.status(404).json(`Alerta não encontrado...`);
+            }else{
+                if(nome){
+                    alerta.nome = nome
+                }
+                if(mensagem){
+                    alerta.mensagem = mensagem
+                }
+                if(condicao){
+                    alerta.condicao = condicao
+                }
+                await db.manager.save(Alerta, alerta)
+                res.status(201).json(alerta)
+            }
+        }catch(error){
+            res.status(500).json({ message: error });
+        }
+
+    }
+
+    public async excluirAlerta(req:Request, res:Response){
+        try{
+            const id = Number(req.params.id);
+            const alerta = await db.getRepository(Alerta).findOne({where:{id:id}});
+            if(alerta){
+                await db.createQueryBuilder().delete().from(Alerta).where("id=:id",{id}).execute();
+                res.status(200).json(`Alerta de id ${alerta.id} excluida com sucesso...`);
+            }else{
+                res.status(404).json(`Alerta de id ${id} não encontrada...`);
+            }
         }catch(error){
             res.status(500).json({ message: error });
         }

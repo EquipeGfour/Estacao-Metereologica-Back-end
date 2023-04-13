@@ -78,9 +78,9 @@ class EstacaoController {
             const estacao = await db.getRepository(Estacao).findOneBy({id: Number(req.params.id)})
             if(estacao){
                 await db.getRepository(Estacao).delete(estacao)
-                res.json(`Estação de id ${estacao.id} excluida com sucesso...`)
+                res.status(200).json(`Estação de id ${estacao.id} excluida com sucesso...`)
             }else{
-                res.json(`Estação de id ${req.params.id} não encontrada...`)
+                res.status(404).json(`Estação de id ${req.params.id} não encontrada...`)
             }
         }catch(error){
             res.status(500).json({ message: error });
