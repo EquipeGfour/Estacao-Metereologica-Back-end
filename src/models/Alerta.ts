@@ -18,9 +18,6 @@ class Alerta{
     @Column()
     condicao: string
 
-    @Column()
-    duracao: number
-
     @ManyToOne((type) => EstacaoHasParametros)
     @JoinColumn({
         name:"id_estacao_has_parametro",
