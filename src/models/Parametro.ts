@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column} from "typeorm";
 
 
 @Entity({name:'parametros'})
-class Parametros{
+class Parametro{
     @PrimaryGeneratedColumn()
     id:number
 
@@ -22,5 +22,5 @@ class Parametros{
     offset:string
 }
 
-export default Parametros
+export default Parametro
 

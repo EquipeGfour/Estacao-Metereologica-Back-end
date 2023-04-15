@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import db from '../config/db';
 import Alerta from '../models/Alerta';
 import Estacao from '../models/Estacao';
-import Parametros from '../models/Parametro';
+import Parametro from '../models/Parametro';
 import EstacaoHasParametros from '../models/EstacaoHasParametros';
 
 

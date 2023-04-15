@@ -1,6 +1,6 @@
 import db from "../config/db";
 import { Request, Response } from "express";
-import Medidas from "../models/Medida";
+import Medida from "../models/Medida";
 import { log } from "console";
 
 class MedidaController{

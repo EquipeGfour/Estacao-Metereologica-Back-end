@@ -1,6 +1,6 @@
 import { PrimaryGeneratedColumn, Column, Entity, JoinColumn, ManyToOne } from "typeorm";
 import Estacao from "./Estacao";
-import Parametros from "./Parametro";
+import Parametro from "./Parametro";
 
 @Entity({name: "estacoes_has_parametros"})
 class EstacaoHasParametros{
@@ -15,13 +15,13 @@ class EstacaoHasParametros{
     })
     estacao: Estacao
 
-    @ManyToOne((type) => Parametros)
+    @ManyToOne((type) => Parametro)
     @JoinColumn({
         name:"id_parametro",
         referencedColumnName: "id",
         foreignKeyConstraintName: "fk_parametro"
     })
-    parametro: Parametros
+    parametro: Parametro
 }
 
 export default EstacaoHasParametros

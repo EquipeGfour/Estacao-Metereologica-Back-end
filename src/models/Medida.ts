@@ -1,10 +1,11 @@
 import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate, ManyToMany, JoinTable, Double, ManyToOne, JoinColumn } from "typeorm";
 import EstacaoHasParametros from "./EstacaoHasParametros";
 import Estacao from "./Estacao";
-import Parametros from "./Parametros";
+import Parametro from "./Parametro";
+
 
 @Entity({name: 'medidas'})
-class Medidas{
+class Medida{
     @PrimaryGeneratedColumn()
     id: number
 
@@ -28,11 +29,11 @@ class Medidas{
     })
     id_estacao: Estacao
 
-    @ManyToOne((type) => Parametros, (parametro) => parametro.id)
+    @ManyToOne((type) => Parametro, (parametro) => parametro.id)
     @JoinColumn({
         name:"id_parametro"
     })
-    id_parametro: Parametros
+    id_parametro: Parametro
 }
 
-export default Medidas
+export default Medida
