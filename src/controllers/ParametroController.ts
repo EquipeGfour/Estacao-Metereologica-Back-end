@@ -29,8 +29,8 @@ class ParametrosController{
 
     public async CadastrarParametros(req: Request, res: Response){
         try{
-            const {tipo, unidade_medida, fator_conversao, offset} = req.body
-            const parametro = await db.getRepository(Parametro).create({tipo, unidade_medida, fator_conversao, offset});
+            const {tipo, unidade_medida, descricao, fator_conversao, offset} = req.body
+            const parametro = await db.getRepository(Parametro).create({tipo, unidade_medida, descricao, fator_conversao, offset});
             await db.getRepository(Parametro).save(parametro);
         }catch(error){
             console.log(error);            
@@ -55,7 +55,7 @@ class ParametrosController{
 
     public async atualizarParametros(req:Request, res:Response){
         try {
-            const {tipo, unidade_medida, fator_conversao, offset} = req.body
+            const {tipo, unidade_medida, descricao, fator_conversao, offset} = req.body
             const parametros = await db.getRepository(Parametro).findOneBy({id:Number(req.params.id)})
             if(parametros){
                 if (tipo !== '') {
@@ -64,6 +64,9 @@ class ParametrosController{
                 if (unidade_medida !== '') {
                     parametros.unidade_medida = unidade_medida;
                 }
+                if (descricao !== ''){
+                    parametros.descricao = descricao;
+                }
                 if (fator_conversao !== '') {
                     parametros.fator_conversao = fator_conversao;
                 }
@@ -71,7 +74,7 @@ class ParametrosController{
                     parametros.offset = offset;
                 }
                 const parametroEditado = await db.manager.save(Parametro, parametros)
-                res.json({message: 'Parametro Editado com sucesso'})
+                res.json({message: 'Parametro Editado com sucesso', parametroEditado})
             }else{
                 res.json('Parametro não encontrado')
             }
