@@ -117,6 +117,7 @@ class EstacaoHasParametrosController {
             res.status(500).json({ message: error });
         }
     }
+
 }
 
 export default new EstacaoHasParametrosController();

@@ -9,13 +9,7 @@ import EstacaoHasParametros from '../models/EstacaoHasParametros';
 class AlertaController{
     public async buscarAlertas(req:Request, res:Response){
         try{
-            const alertas = await db.getRepository(Alerta).find({
-                relations: {
-                    estacao:true,
-                    id_estacao_has_parametros:true,
-                    parametro:true
-                }
-            });
+            const alertas = await db.getRepository(Alerta).find();
             res.json(alertas);
         }catch(error){
             res.status(500).json({ message: error });
@@ -28,11 +22,6 @@ class AlertaController{
             const alerta = await db.getRepository(Alerta).find({
                 where:{
                     id: id
-                },
-                relations:{
-                    estacao:true,
-                    id_estacao_has_parametros:true,
-                    parametro:true
                 }
             });
             if(!alerta){
@@ -47,30 +36,14 @@ class AlertaController{
 
     public async cadastrarAlerta(req:Request, res:Response){
         try{
-            const {nome, mensagem, condicao, id_estacao_has_parametros} = req.body
-            const ehp = await db.getRepository(EstacaoHasParametros).findOne({
-                where:{
-                    id:id_estacao_has_parametros
-                },
-                relations:{
-                    estacao:true,
-                    parametro:true
-                }
-            })
-            if(!ehp){
-                res.status(404).json("Ligação não econtrada...");
-            }
-
-            
+            const {nome, mensagem, condicao} = req.body
 
             const alerta = new Alerta();
             await db.transaction(async(transactionalEntityManager) => {
                 alerta.nome = nome;
                 alerta.mensagem = mensagem;
                 alerta.condicao = condicao;
-                alerta.estacao = ehp.estacao;
-                alerta.parametro = ehp.parametro;
-                alerta.id_estacao_has_parametros = id_estacao_has_parametros
+
                 await transactionalEntityManager.save(alerta);
             })
             res.json(alerta);
@@ -87,11 +60,6 @@ class AlertaController{
             const alerta = await db.getRepository(Alerta).findOne({
                 where:{
                     id: id
-                },
-                relations:{
-                    estacao:true,
-                    id_estacao_has_parametros:true,
-                    parametro:true
                 }
             });
             if(!alerta){

@@ -30,9 +30,9 @@ class EstacaoController {
 
     public async cadastrarEstacao(req: Request, res: Response){
         try{
-            const { nome, latitude, longitude, utc } = req.body
+            const { uid, nome, latitude, longitude, utc } = req.body
             
-            const estacao = await db.getRepository(Estacao).create({ nome, latitude, longitude, utc });
+            const estacao = await db.getRepository(Estacao).create({ uid, nome, latitude, longitude, utc });
             await db.getRepository(Estacao).save(estacao);
 
             res.json(estacao);
@@ -75,9 +75,10 @@ class EstacaoController {
 
     public async excluirEstacao(req: Request, res: Response){
         try{
-            const estacao = await db.getRepository(Estacao).findOneBy({id: Number(req.params.id)})
+            const id = Number(req.params.id)
+            const estacao = await db.getRepository(Estacao).findOneBy({id: id})
             if(estacao){
-                await db.getRepository(Estacao).delete(estacao)
+                await db.createQueryBuilder().delete().from(Estacao).where("id=:id", {id}).execute();
                 res.status(200).json(`Estação de id ${estacao.id} excluida com sucesso...`)
             }else{
                 res.status(404).json(`Estação de id ${req.params.id} não encontrada...`)

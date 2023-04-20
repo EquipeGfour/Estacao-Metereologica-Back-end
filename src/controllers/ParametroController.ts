@@ -19,7 +19,7 @@ class ParametrosController{
             if (parametro){
                 res.json(parametro)
             }else{
-                res.json(`Parâmetro não encontrado !`)        
+                res.status(404).json(`Parâmetro não encontrado !`)        
             }  
         }catch(error){
             console.log(error);            
@@ -40,12 +40,13 @@ class ParametrosController{
 
     public async ExcluirParametros(req: Request, res: Response){
         try{
-            const parametro = await db.getRepository(Parametro).findOneBy({id:Number(req.params.id)})
+            const id = Number(req.params.id);
+            const parametro = await db.getRepository(Parametro).findOneBy({id:id})
             if(parametro){
-                await db.getRepository(Parametro).delete(parametro)
-                res.json(`Parâmetro de id ${parametro.id} excluida com sucesso !`)
+                await db.getRepository(Parametro).delete(parametro);
+                res.json(`Parâmetro de id ${id} excluida com sucesso !`)
             }else{
-                res.json(`Parâmetro de ${req.params.id} não encontrada !`)
+                res.status(404).json(`Parâmetro de ${id} não encontrada !`)
             }
         }catch(error){
             console.log(error);            
@@ -76,7 +77,7 @@ class ParametrosController{
                 const parametroEditado = await db.manager.save(Parametro, parametros)
                 res.json({message: 'Parametro Editado com sucesso', parametroEditado})
             }else{
-                res.json('Parametro não encontrado')
+                res.status(404).json('Parametro não encontrado')
             }
         } catch (error) {
             res.status(500).json({ message: error});

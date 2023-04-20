@@ -7,6 +7,9 @@ class Estacao{
     id:number
 
     @Column()
+    uid:number
+
+    @Column()
     nome:string
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', nullable:false })
