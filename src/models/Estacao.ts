@@ -7,7 +7,7 @@ class Estacao{
     id:number
 
     @Column()
-    uid:number
+    uid:string
 
     @Column()
     nome:string
