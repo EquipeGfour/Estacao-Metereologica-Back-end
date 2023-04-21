@@ -10,7 +10,7 @@ class Medida{
     id: number
 
     @Column()
-    unixtime: number
+    unixtime: Date
 
     @Column({type:'float'})
     valor_medido: Double
