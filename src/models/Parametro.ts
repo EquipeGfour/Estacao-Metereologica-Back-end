@@ -1,13 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate, ManyToMany, JoinTable } from "typeorm";
-import Estacao from "./Estacao";
+import { Entity, PrimaryGeneratedColumn, Column} from "typeorm";
+
 
 @Entity({name:'parametros'})
-class Parametros{
+class Parametro{
     @PrimaryGeneratedColumn()
     id:number
 
     @Column()
     tipo:string
+
+    @Column()
+    descricao: string
 
     @Column()
     unidade_medida:string
@@ -19,5 +22,5 @@ class Parametros{
     offset:string
 }
 
-export default Parametros
+export default Parametro
 

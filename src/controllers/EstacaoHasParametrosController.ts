@@ -2,7 +2,7 @@ import db from "../config/db";
 import { Request, Response } from 'express';
 import EstacaoHasParametros from "../models/EstacaoHasParametros";
 import Estacao from "../models/Estacao";
-import Parametros from "../models/Parametros";
+import Parametro from "../models/Parametro";
 
 
 class EstacaoHasParametrosController {
@@ -16,7 +16,7 @@ class EstacaoHasParametrosController {
                 return res.status(404).json({ message: 'Estação não encontrada.' });
             }
 
-            const parametros = await db.getRepository(Parametros).findByIds(id_parametros);
+            const parametros = await db.getRepository(Parametro).findByIds(id_parametros);
             if (parametros.length !== id_parametros.length) {
                 return res.status(404).json({ message: 'Parâmetros não encontrados!' });
             }
@@ -117,6 +117,7 @@ class EstacaoHasParametrosController {
             res.status(500).json({ message: error });
         }
     }
+
 }
 
 export default new EstacaoHasParametrosController();

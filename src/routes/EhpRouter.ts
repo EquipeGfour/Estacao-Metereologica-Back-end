@@ -1,6 +1,7 @@
 import { Router } from "express";
 import EstacaoHasParametrosController from "../controllers/EstacaoHasParametrosController";
 
+
 const routes = Router();
 
 routes.get('/parametroEstacao', EstacaoHasParametrosController.buscarEHP);
