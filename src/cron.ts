@@ -30,7 +30,6 @@ const tratarDados = async () =>{
             medida.id_estacao_has_parametros = estacaoHasTemperatura
             medida.id_parametro = estacaoHasTemperatura.parametro 
             medida.unixtime = new Date(el.unx * 1000);
-            console.log(medida);
             await db.getRepository(Medida).save(medida)
             await medidaCollection.deleteOne({'_id': el['_id']})
         }   
@@ -49,7 +48,6 @@ const tratarDados = async () =>{
             medida.id_estacao_has_parametros = estacaoHasUmidade
             medida.id_parametro = estacaoHasUmidade.parametro 
             medida.unixtime = new Date(el.unx * 1000);
-            console.log(medida);
             await db.getRepository(Medida).save(medida)
             await medidaCollection.deleteOne({'_id': el['_id']})
         }   
@@ -68,7 +66,6 @@ const tratarDados = async () =>{
             medida.id_estacao_has_parametros = estacoesHasPluviometro
             medida.id_parametro = estacoesHasPluviometro.parametro 
             medida.unixtime = new Date(el.unx * 1000);
-            console.log(medida);
             await db.getRepository(Medida).save(medida)
             await medidaCollection.deleteOne({'_id': el['_id']})
         }     
@@ -87,7 +84,6 @@ const tratarDados = async () =>{
             medida.id_estacao_has_parametros = estacoesHasBateria
             medida.id_parametro = estacoesHasBateria.parametro 
             medida.unixtime = new Date(el.unx * 1000);
-            console.log(medida);
             await db.getRepository(Medida).save(medida)
             await medidaCollection.deleteOne({'_id': el['_id']})
         }             
