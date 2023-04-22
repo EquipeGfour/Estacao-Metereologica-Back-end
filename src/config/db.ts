@@ -1,8 +1,12 @@
 import { DataSource } from "typeorm";
 import * as dotenv from "dotenv";
 import Estacao from "../models/Estacao";
-import Parametros from "../models/Parametros";
+import Parametro from "../models/Parametro";
 import EstacaoHasParametros from "../models/EstacaoHasParametros";
+import Alerta from "../models/Alerta";
+import Usuario from "../models/Usuario";
+import Medida from "../models/Medida"
+import RegistroAlerta from "../models/RegistroAlerta";
 
 dotenv.config();
 
@@ -11,7 +15,6 @@ const PASSWORD = process.env.PASSWORD || "";
 const DATABASE = process.env.DATABASE || "";
 const HOST = process.env.HOST || "localhost";
 const DB_PORT = process.env.DB_PORT || 3306;
-
 
 const db = new DataSource({
     database: DATABASE,
@@ -22,7 +25,7 @@ const db = new DataSource({
     password:PASSWORD,
     synchronize: true, 
     logging: false,
-    entities: [Estacao, Parametros, EstacaoHasParametros],
+    entities: [Estacao, Parametro, EstacaoHasParametros, Alerta, Usuario, Medida, RegistroAlerta],
     migrations: ["src/migrations/*.ts"],
     subscribers: [],
     maxQueryExecutionTime: 2000
