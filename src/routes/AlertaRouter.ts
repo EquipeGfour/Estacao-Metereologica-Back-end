@@ -6,6 +6,7 @@ const routes = Router();
 
 routes.get('/buscar', AlertaController.buscarAlertas);
 routes.get('/buscar/:id', AlertaController.buscarAlerta);
+routes.get('/busca/:busca', AlertaController.buscarAlertaPorNomeMsg);
 routes.post('/cadastrar', AlertaController.cadastrarAlerta);
 routes.put('/editar/:id', AlertaController.editarAlerta);
 routes.delete('/excluir/:id', AlertaController.excluirAlerta);

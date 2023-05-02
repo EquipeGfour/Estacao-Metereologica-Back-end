@@ -31,15 +31,14 @@ class EstacaoController {
 
     public async buscarPorNomeEuid(req: Request, res: Response){
         try{
-            const termo = req.params.termo;
-            console.log(termo)
+            const { busca } = req.params;
             const estacao = await db.getRepository(Estacao).find({
                 where:[
                     {
-                        nome: Like(`%${termo}%`)
+                        nome: Like(`%${busca}%`)
                     },
                     {
-                        uid: Like(`%${termo}%`)
+                        uid: Like(`%${busca}%`)
                     }
                 ]
             })
