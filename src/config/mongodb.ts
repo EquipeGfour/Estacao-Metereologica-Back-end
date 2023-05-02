@@ -11,7 +11,7 @@ const connectMongoDb = async () => {
         await client.connect();
         const db = client.db('EstacaoMeteorologia');
         medidaCollection = db.collection('medidas');
-        console.log("Conexão ao banco de dados....");
+        console.log("Conexão estabelecida com o Mongodb....");
     }catch(error){
         console.error(error);
     }
