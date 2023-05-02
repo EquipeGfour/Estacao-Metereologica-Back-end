@@ -31,7 +31,8 @@ class EstacaoController {
 
     public async buscarPorNomeEuid(req: Request, res: Response){
         try{
-            const {termo} = req.params;
+            const termo = req.params.termo;
+            console.log(termo)
             const estacao = await db.getRepository(Estacao).find({
                 where:[
                     {
