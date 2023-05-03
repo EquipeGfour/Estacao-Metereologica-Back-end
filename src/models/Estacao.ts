@@ -7,7 +7,7 @@ class Estacao{
     @PrimaryGeneratedColumn()
     id:number
 
-    @Column()
+    @Column({unique: true})
     uid:string
 
     @Column()

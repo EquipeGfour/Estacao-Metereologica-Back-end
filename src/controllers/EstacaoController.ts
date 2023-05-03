@@ -107,6 +107,23 @@ class EstacaoController {
             res.status(500).json({ message: error });
         }
     };
+
+    public async desativarEstacao(req: Request, res: Response){
+        try{
+            const estacao = await db.getRepository(Estacao).findOneBy({id: Number(req.params.id)})
+            if(estacao){
+                if(estacao.status == 'ativo'){
+                    estacao.status = 'desativado'
+                }
+                const estacaoDesativada = await db.manager.save(Estacao, estacao)
+                res.json({message: 'Estação desativada com sucesso!', estacaoDesativada})
+            }else{
+                res.json(`Estação não encontrada`)
+            }
+        }catch(error){
+            res.status(500).json({ message: error })
+        }
+    }
 }
 
 export default new EstacaoController();
