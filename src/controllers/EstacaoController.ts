@@ -1,6 +1,7 @@
 import db from "../config/db";
 import { Request, Response } from 'express';
 import Estacao from "../models/Estacao";
+import { Like } from "typeorm";
 
 
 class EstacaoController {
@@ -27,6 +28,25 @@ class EstacaoController {
             res.status(500).json({ message: error});
         }
     };
+
+    public async buscarPorNomeEuid(req: Request, res: Response){
+        try{
+            const { busca } = req.params;
+            const estacao = await db.getRepository(Estacao).find({
+                where:[
+                    {
+                        nome: Like(`%${busca}%`)
+                    },
+                    {
+                        uid: Like(`%${busca}%`)
+                    }
+                ]
+            })
+            res.json(estacao);
+        }catch(error){
+            res.status(500).json({ message: error});
+        }
+    }
 
     public async cadastrarEstacao(req: Request, res: Response){
         try{

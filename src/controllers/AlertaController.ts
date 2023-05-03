@@ -4,6 +4,7 @@ import Alerta from '../models/Alerta';
 import Estacao from '../models/Estacao';
 import Parametro from '../models/Parametro';
 import EstacaoHasParametros from '../models/EstacaoHasParametros';
+import { Like } from 'typeorm';
 
 
 class AlertaController{
@@ -31,6 +32,25 @@ class AlertaController{
             }
         }catch(error){
             res.status(500).json({ message: error });
+        }
+    }
+
+    public async buscarAlertaPorNomeMsg(req:Request, res:Response){
+        try{
+            const { busca } = req.params;
+            const alertas = await db.getRepository(Alerta).find({
+                where:[
+                    {
+                        nome: Like(`%${busca}%`)
+                    },
+                    {
+                        mensagem: Like(`%${busca}%`)
+                    }
+                ]
+            });
+            res.json(alertas);
+        }catch(error){
+            res.status(500).json({ message:error });
         }
     }
 

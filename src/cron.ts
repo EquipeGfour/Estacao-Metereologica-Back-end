@@ -1,12 +1,22 @@
-import cron from 'node-cron'
+import cron from 'node-cron';
 import { buscarMedidas } from './services/MedidaService';
 import db from './config/db';
 import EstacaoHasParametros from './models/EstacaoHasParametros';
 import Medida from './models/Medida';
 import { medidaCollection } from './config/mongodb';
+import * as dotenv from "dotenv";
+
+
+dotenv.config();
+const URI = process.env.URI || null;
+
 
 const cronScheduleToMysql = () =>{
-    cron.schedule("*/15 * * * *", tratarDados);
+    if(URI){
+        cron.schedule("*/15 * * * *", tratarDados);
+    }else{
+        cron.schedule("*/15 * * * *", ()=>console.log('Não foi possivel buscar dados do Mongodb...'));
+    }
 }
 
 const tratarDados = async () =>{
