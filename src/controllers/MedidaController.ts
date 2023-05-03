@@ -8,9 +8,9 @@ class MedidaController{
         try{
             const medidas = await db.getRepository(Medida).find({
                 relations:{
-                    id_estacao:true,
-                    id_parametro:true,
-                    id_estacao_has_parametros:true
+                    estacao:true,
+                    parametro:true,
+                    estacao_has_parametros:true
                 }
             });
             res.json(medidas)
@@ -28,9 +28,9 @@ class MedidaController{
                     id:id
                 },
                 relations:{
-                    id_estacao:true,
-                    id_parametro:true,
-                    id_estacao_has_parametros:true
+                    estacao:true,
+                    parametro:true,
+                    estacao_has_parametros:true
                 }
             });
             if(medida){

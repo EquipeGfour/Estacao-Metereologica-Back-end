@@ -39,9 +39,9 @@ const tratarDados = async () =>{
             if (estacaoHasTemperatura){
                 const medida = new Medida()
                 medida.valor_medido = el.temp
-                medida.id_estacao = estacaoHasTemperatura.estacao 
-                medida.id_estacao_has_parametros = estacaoHasTemperatura
-                medida.id_parametro = estacaoHasTemperatura.parametro 
+                medida.estacao = estacaoHasTemperatura.estacao 
+                medida.estacao_has_parametros = estacaoHasTemperatura
+                medida.parametro = estacaoHasTemperatura.parametro 
                 medida.unixtime = new Date(el.unx * 1000);
                 await db.getRepository(Medida).save(medida)
                 await medidaCollection.deleteOne({'_id': el['_id']})
@@ -57,9 +57,9 @@ const tratarDados = async () =>{
             if (estacaoHasUmidade){
                 const medida = new Medida()
                 medida.valor_medido = el.umi
-                medida.id_estacao = estacaoHasUmidade.estacao 
-                medida.id_estacao_has_parametros = estacaoHasUmidade
-                medida.id_parametro = estacaoHasUmidade.parametro 
+                medida.estacao = estacaoHasUmidade.estacao 
+                medida.estacao_has_parametros = estacaoHasUmidade
+                medida.parametro = estacaoHasUmidade.parametro 
                 medida.unixtime = new Date(el.unx * 1000);
                 await db.getRepository(Medida).save(medida)
                 await medidaCollection.deleteOne({'_id': el['_id']})
@@ -75,9 +75,9 @@ const tratarDados = async () =>{
             if (estacoesHasPluviometro){
                 const medida = new Medida()
                 medida.valor_medido = el.pluv
-                medida.id_estacao = estacoesHasPluviometro.estacao 
-                medida.id_estacao_has_parametros = estacoesHasPluviometro
-                medida.id_parametro = estacoesHasPluviometro.parametro 
+                medida.estacao = estacoesHasPluviometro.estacao 
+                medida.estacao_has_parametros = estacoesHasPluviometro
+                medida.parametro = estacoesHasPluviometro.parametro 
                 medida.unixtime = new Date(el.unx * 1000);
                 await db.getRepository(Medida).save(medida)
                 await medidaCollection.deleteOne({'_id': el['_id']})
@@ -93,9 +93,9 @@ const tratarDados = async () =>{
             if (estacoesHasBateria){
                 const medida = new Medida()
                 medida.valor_medido = el.bat
-                medida.id_estacao = estacoesHasBateria.estacao 
-                medida.id_estacao_has_parametros = estacoesHasBateria
-                medida.id_parametro = estacoesHasBateria.parametro 
+                medida.estacao = estacoesHasBateria.estacao 
+                medida.estacao_has_parametros = estacoesHasBateria
+                medida.parametro = estacoesHasBateria.parametro 
                 medida.unixtime = new Date(el.unx * 1000);
                 await db.getRepository(Medida).save(medida)
                 await medidaCollection.deleteOne({'_id': el['_id']})

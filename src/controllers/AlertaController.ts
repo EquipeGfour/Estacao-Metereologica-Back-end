@@ -73,6 +73,24 @@ class AlertaController{
         }
     }
 
+    public async vincularAlerta(req:Request, res:Response){
+        try{
+            const { id_estacao, id_parametro, id_alerta } = req.body;
+            const alerta = await db.getRepository(Alerta).findOne({where:{id:id_alerta}});
+            const estacao_has_parametros = await db.getRepository(EstacaoHasParametros).findOne({
+                where:{
+                    estacao: id_estacao,
+                    parametro: id_parametro
+                }
+            });
+            estacao_has_parametros.alerta = alerta;
+            await db.getRepository(EstacaoHasParametros).save(estacao_has_parametros);
+            res.json(estacao_has_parametros);
+        }catch(error){
+            res.status(500).json({ message: error });
+        }
+    }
+
     public async editarAlerta(req:Request, res:Response){
         try{
             const {nome, mensagem, condicao} = req.body;

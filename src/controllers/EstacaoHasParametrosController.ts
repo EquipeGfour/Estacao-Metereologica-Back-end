@@ -46,7 +46,8 @@ class EstacaoHasParametrosController {
             const estacoes = await db.getRepository(EstacaoHasParametros).find({
                 relations: {
                     estacao: true,
-                    parametro: true
+                    parametro: true,
+                    alerta:true
                 }
             });
             res.status(200).json(estacoes);
@@ -61,7 +62,8 @@ class EstacaoHasParametrosController {
             const dados = await db.getRepository(EstacaoHasParametros).findOne({
                 relations: {
                     estacao: true,
-                    parametro: true
+                    parametro: true,
+                    alerta:true
                 },
                 where: { id: Number(req.params.id) }
             })
