@@ -28,7 +28,7 @@ const tratarDados = async () =>{
         const umi = medidas.filter((medida)=> medida.umi)
         const pluv = medidas.filter((medida)=> medida.pluv)
         const bateria = medidas.filter((medida)=> medida.bat)
-    
+
         temp.forEach(async el => {
             const estacaoHasTemperatura = await db.getRepository(EstacaoHasParametros).createQueryBuilder("estacoes_has_parametros")
                             .innerJoinAndSelect("estacoes_has_parametros.estacao", "estacoes" )
