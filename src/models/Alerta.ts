@@ -13,7 +13,10 @@ class Alerta{
     mensagem: string
 
     @Column()
-    condicao: string
+    tipo: string
+
+    @Column()
+    valor: string
 
 }
 
