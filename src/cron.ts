@@ -5,8 +5,7 @@ import EstacaoHasParametros from './models/EstacaoHasParametros';
 import Medida from './models/Medida';
 import { medidaCollection } from './config/mongodb';
 import * as dotenv from "dotenv";
-import { log } from 'console';
-import { Estacao, Parametro } from './models';
+import { Estacao, Parametro, RegistroAlerta } from './models';
 
 
 dotenv.config();
@@ -21,6 +20,28 @@ const cronScheduleToMysql = () =>{
     }
 }
 
+const cronScheduleReportAlerta = () =>{
+    try {
+        cron.schedule("*/1 * * * *" , verificarAlerta)
+    } catch (error) {
+        console.log(error);
+        
+    }
+}
+
+const realizarReport = async (medida) =>{
+    const report = new RegistroAlerta()
+    report.alerta = medida.alerta
+    report.estacao = medida.estacao
+    report.estacao_has_parametros = medida.estacao_has_parametros
+    report.medida = medida
+    report.parametro = medida.parametro
+    report.latitude = medida.estacao.latitude
+    report.longitude = medida.estacao.longitude
+    report.unixtime = medida.unixtime
+    await db.getRepository(RegistroAlerta).save(report)
+}
+
 const tratarDados = async () =>{
     console.log('\nVerificando se existem medidas -', new Date().toLocaleString("pt-BR", {timeZone: "America/Sao_Paulo"}));
     const medidas = await buscarMedidas()
@@ -32,14 +53,6 @@ const tratarDados = async () =>{
         const bateria = medidas.filter((medida)=> medida.bat)
 
         temp.forEach(async el => {
-            // const estacaoHasTemperatura = await db.getRepository(EstacaoHasParametros).createQueryBuilder("estacoes_has_parametros")
-            //                 .innerJoinAndSelect("estacoes_has_parametros.estacao", "estacoes" )
-            //                 .leftJoinAndSelect('estacoes_has_parametros.parametro', 'parametros')
-            //                 .innerJoinAndSelect('estacoes_has_parametros.alerta', 'alerta')
-            //                 .where("estacoes.uid = :uid", {uid: el.uid})
-            //                 .andWhere('parametros.tipo = :tipo', {tipo: 'Temperatura'})
-            //                 .getOne()
-
                 const estacao = await db.getRepository(Estacao).findOneBy({uid:el.uid})
                 const parametro = await db.getRepository(Parametro).findOneBy({tipo:'Temperatura'})
                 const estacaoHasParametros = await db.getRepository(EstacaoHasParametros).findOne({
@@ -53,7 +66,6 @@ const tratarDados = async () =>{
                         parametro:parametro            
                     }
                 })
-                console.log(estacaoHasParametros);
                 
             if (estacaoHasParametros){
                 
@@ -133,4 +145,42 @@ const tratarDados = async () =>{
     }
 }
 
-export {cronScheduleToMysql}
+const verificarAlerta = async () => {
+    const medidas = await db.getRepository(Medida).find({
+        relations:{
+            alerta:true,
+            estacao:true,
+            estacao_has_parametros:true,
+            parametro:true
+        }
+    })
+   
+   medidas.forEach(async medida => {
+    if(medida.alerta){
+         
+        if(medida.alerta.tipo == 'abaixo'){
+            console.log(medida);
+            
+           if(medida.valor_medido < medida.alerta.valor){
+                realizarReport(medida)
+           }else{
+                console.log("Não ativou");
+            
+            }
+        }
+        if(medida.alerta.tipo == 'acima'){
+            if(medida.valor_medido > medida.alerta.valor){
+               realizarReport(medida)
+            }else{
+                console.log("Não ativou");
+            }   
+        }
+    }else{
+        console.log("Não possui alerta");
+        
+    }
+   })
+}
+
+
+export {cronScheduleToMysql, cronScheduleReportAlerta}
