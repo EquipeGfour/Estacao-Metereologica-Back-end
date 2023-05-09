@@ -5,6 +5,8 @@ import EstacaoHasParametros from './models/EstacaoHasParametros';
 import Medida from './models/Medida';
 import { medidaCollection } from './config/mongodb';
 import * as dotenv from "dotenv";
+import { log } from 'console';
+import { Estacao, Parametro } from './models';
 
 
 dotenv.config();
@@ -30,18 +32,37 @@ const tratarDados = async () =>{
         const bateria = medidas.filter((medida)=> medida.bat)
 
         temp.forEach(async el => {
-            const estacaoHasTemperatura = await db.getRepository(EstacaoHasParametros).createQueryBuilder("estacoes_has_parametros")
-                            .innerJoinAndSelect("estacoes_has_parametros.estacao", "estacoes" )
-                            .leftJoinAndSelect('estacoes_has_parametros.parametro', 'parametros')
-                            .where("estacoes.uid = :uid", {uid: el.uid})
-                            .andWhere('parametros.tipo = :tipo', {tipo: 'Temperatura'})
-                            .getOne()
-            if (estacaoHasTemperatura){
+            // const estacaoHasTemperatura = await db.getRepository(EstacaoHasParametros).createQueryBuilder("estacoes_has_parametros")
+            //                 .innerJoinAndSelect("estacoes_has_parametros.estacao", "estacoes" )
+            //                 .leftJoinAndSelect('estacoes_has_parametros.parametro', 'parametros')
+            //                 .innerJoinAndSelect('estacoes_has_parametros.alerta', 'alerta')
+            //                 .where("estacoes.uid = :uid", {uid: el.uid})
+            //                 .andWhere('parametros.tipo = :tipo', {tipo: 'Temperatura'})
+            //                 .getOne()
+
+                const estacao = await db.getRepository(Estacao).findOneBy({uid:el.uid})
+                const parametro = await db.getRepository(Parametro).findOneBy({tipo:'Temperatura'})
+                const estacaoHasParametros = await db.getRepository(EstacaoHasParametros).findOne({
+                    relations:{
+                        alerta:true,
+                        estacao:true,
+                        parametro:true
+                    },
+                    where:{
+                        estacao:estacao,
+                        parametro:parametro            
+                    }
+                })
+                console.log(estacaoHasParametros);
+                
+            if (estacaoHasParametros){
+                
                 const medida = new Medida()
                 medida.valor_medido = el.temp
-                medida.estacao = estacaoHasTemperatura.estacao 
-                medida.estacao_has_parametros = estacaoHasTemperatura
-                medida.parametro = estacaoHasTemperatura.parametro 
+                medida.estacao = estacaoHasParametros.estacao 
+                medida.estacao_has_parametros = estacaoHasParametros
+                medida.parametro = estacaoHasParametros.parametro
+                medida.alerta = estacaoHasParametros.alerta
                 medida.unixtime = new Date(el.unx * 1000);
                 await db.getRepository(Medida).save(medida)
                 await medidaCollection.deleteOne({'_id': el['_id']})

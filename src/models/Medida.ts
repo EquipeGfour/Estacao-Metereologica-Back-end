@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate, Man
 import EstacaoHasParametros from "./EstacaoHasParametros";
 import Estacao from "./Estacao";
 import Parametro from "./Parametro";
+import Alerta from "./Alerta";
 
 
 @Entity({name: 'medidas'})
@@ -34,6 +35,10 @@ class Medida{
         name:"id_parametro"
     })
     parametro: Parametro
+
+    @ManyToOne((type) => Alerta, (alerta) => alerta.id, {onDelete:"CASCADE"})
+    @JoinColumn({name:"id_alerta"})
+    alerta: Alerta
 }
 
 export default Medida
