@@ -84,7 +84,7 @@ class EstacaoController {
                 const estacaoEditada = await db.manager.save(Estacao, estacao)
                 res.json({message: 'Estação editada com sucesso!', estacaoEditada})
             }else{
-                res.json(`Estação não encontrada.`)
+                res.status(500).json(`Estação não encontrada.`)
             }           
         }catch(error) {
             res.status(500).json({ message: error});
@@ -102,6 +102,22 @@ class EstacaoController {
                 res.status(200).json(`Estação de id ${estacao.id} excluida com sucesso...`)
             }else{
                 res.status(404).json(`Estação de id ${req.params.id} não encontrada...`)
+            }
+        }catch(error){
+            res.status(500).json({ message: error });
+        }
+    };
+
+
+    public async excluirEstacaoPorNome(req:Request, res: Response){
+        try{
+        const nome = String (req.params.nome);
+        const estacao = await db.getRepository(Estacao).findOneBy({nome:nome})
+        if(estacao){
+            await db.createQueryBuilder().delete().from(Estacao).where("nome=:nome", {nome}).execute();
+                res.status(200).json(`Estação de id ${estacao.nome} excluida com sucesso...`)
+            }else{
+                res.status(404).json(`Estação de id ${req.params.nome} não encontrada...`)
             }
         }catch(error){
             res.status(500).json({ message: error });
