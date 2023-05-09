@@ -105,10 +105,10 @@ class AlertaController{
                 res.status(404).json(`Alerta não encontrado...`);
             }else{
                 if(nome){
-                    alerta.nome = nome
+                    alerta.nome = nome;
                 }
                 if(mensagem){
-                    alerta.mensagem = mensagem
+                    alerta.mensagem = mensagem;
                 }
                 if(tipo){
                     alerta.tipo = tipo
