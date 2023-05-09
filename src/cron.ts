@@ -32,14 +32,6 @@ const tratarDados = async () =>{
         const bateria = medidas.filter((medida)=> medida.bat)
 
         temp.forEach(async el => {
-            // const estacaoHasTemperatura = await db.getRepository(EstacaoHasParametros).createQueryBuilder("estacoes_has_parametros")
-            //                 .innerJoinAndSelect("estacoes_has_parametros.estacao", "estacoes" )
-            //                 .leftJoinAndSelect('estacoes_has_parametros.parametro', 'parametros')
-            //                 .innerJoinAndSelect('estacoes_has_parametros.alerta', 'alerta')
-            //                 .where("estacoes.uid = :uid", {uid: el.uid})
-            //                 .andWhere('parametros.tipo = :tipo', {tipo: 'Temperatura'})
-            //                 .getOne()
-
                 const estacao = await db.getRepository(Estacao).findOneBy({uid:el.uid})
                 const parametro = await db.getRepository(Parametro).findOneBy({tipo:'Temperatura'})
                 const estacaoHasParametros = await db.getRepository(EstacaoHasParametros).findOne({
