@@ -56,13 +56,14 @@ class AlertaController{
 
     public async cadastrarAlerta(req:Request, res:Response){
         try{
-            const {nome, mensagem, condicao} = req.body
+            const {nome, mensagem, tipo, valor} = req.body
 
             const alerta = new Alerta();
             await db.transaction(async(transactionalEntityManager) => {
                 alerta.nome = nome;
                 alerta.mensagem = mensagem;
-                alerta.condicao = condicao;
+                alerta.tipo = tipo;
+                alerta.valor = valor;
 
                 await transactionalEntityManager.save(alerta);
             })
@@ -93,7 +94,7 @@ class AlertaController{
 
     public async editarAlerta(req:Request, res:Response){
         try{
-            const {nome, mensagem, condicao} = req.body;
+            const {nome, mensagem, tipo, valor} = req.body;
             const id = Number(req.params.id)
             const alerta = await db.getRepository(Alerta).findOne({
                 where:{
@@ -109,8 +110,11 @@ class AlertaController{
                 if(mensagem){
                     alerta.mensagem = mensagem
                 }
-                if(condicao){
-                    alerta.condicao = condicao
+                if(tipo){
+                    alerta.tipo = tipo
+                }
+                if(valor){
+                    alerta.valor = valor
                 }
                 await db.manager.save(Alerta, alerta)
                 res.status(201).json(alerta)
