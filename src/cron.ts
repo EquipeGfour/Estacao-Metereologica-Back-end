@@ -14,7 +14,7 @@ const URI = process.env.URI || null;
 
 const cronScheduleToMysql = () =>{
     if(URI){
-        cron.schedule("*/15 * * * *", tratarDados);
+        cron.schedule("* * * * *", tratarDados);
     }else{
         cron.schedule("*/15 * * * *", ()=>console.log('Não foi possivel buscar dados do Mongodb...'));
     }
@@ -42,9 +42,24 @@ const realizarReport = async (medida) =>{
     await db.getRepository(RegistroAlerta).save(report)
 }
 
+
+const registrarMedida = async (ligacao: EstacaoHasParametros, dados) => {
+    const medida = new Medida()
+    medida.valor_medido = dados.temp || dados.umi || dados.pluv || dados.bat
+    medida.estacao = ligacao.estacao 
+    medida.estacao_has_parametros = ligacao
+    medida.parametro = ligacao.parametro
+    medida.alerta = ligacao.alerta
+    medida.unixtime = new Date(dados.unx * 1000);
+    await db.getRepository(Medida).save(medida)
+    await medidaCollection.deleteOne({'_id': dados['_id']})
+}
+
+
 const tratarDados = async () =>{
     console.log('\nVerificando se existem medidas -', new Date().toLocaleString("pt-BR", {timeZone: "America/Sao_Paulo"}));
     const medidas = await buscarMedidas()
+    let contador = 0
     if(medidas.length > 0){
 
         const temp = medidas.filter((medida)=> medida.temp)
@@ -53,32 +68,26 @@ const tratarDados = async () =>{
         const bateria = medidas.filter((medida)=> medida.bat)
 
         temp.forEach(async el => {
-                const estacao = await db.getRepository(Estacao).findOneBy({uid:el.uid})
-                const parametro = await db.getRepository(Parametro).findOneBy({tipo:'Temperatura'})
-                const estacaoHasParametros = await db.getRepository(EstacaoHasParametros).findOne({
-                    relations:{
-                        alerta:true,
-                        estacao:true,
-                        parametro:true
-                    },
-                    where:{
-                        estacao:estacao,
-                        parametro:parametro            
-                    }
-                })
-                
-            if (estacaoHasParametros){
-                
-                const medida = new Medida()
-                medida.valor_medido = el.temp
-                medida.estacao = estacaoHasParametros.estacao 
-                medida.estacao_has_parametros = estacaoHasParametros
-                medida.parametro = estacaoHasParametros.parametro
-                medida.alerta = estacaoHasParametros.alerta
-                medida.unixtime = new Date(el.unx * 1000);
-                await db.getRepository(Medida).save(medida)
-                await medidaCollection.deleteOne({'_id': el['_id']})
-            }   
+                const estacao = await db.getRepository(Estacao).findOneBy({uid:el.uid});
+                if(estacao){
+                    const parametro = await db.getRepository(Parametro).findOneBy({tipo:'Temperatura'})
+                    const estacaoHasParametros = await db.getRepository(EstacaoHasParametros).findOne({
+                        relations:{
+                            alerta:true,
+                            estacao:true,
+                            parametro:true
+                        },
+                        where:{
+                            estacao:estacao,
+                            parametro:parametro            
+                        }
+                    })
+                    console.log(estacao)
+                if (estacaoHasParametros){
+                    registrarMedida(estacaoHasParametros, el);
+                    contador ++
+                }
+            }
         })     
         umi.forEach(async el => {
             const estacaoHasUmidade = await db.getRepository(EstacaoHasParametros).createQueryBuilder("estacoes_has_parametros")
@@ -136,6 +145,7 @@ const tratarDados = async () =>{
         })
         console.log("\nMedidas exportadas do MongoDB para MySQL com sucesso! -", new Date().toLocaleString("pt-BR", {timeZone: "America/Sao_Paulo"}));
         if(medidas.length > 1){
+            console.log(contador)
             console.log(`${medidas.length} dados exportados`);
         }else{
             console.log(`${medidas.length} dado exportado`);
