@@ -14,7 +14,7 @@ const URI = process.env.URI || null;
 
 const cronScheduleToMysql = () =>{
     if(URI){
-        cron.schedule("* * * * *", tratarDados);
+        cron.schedule("*/2 * * * *", tratarDados);
     }else{
         cron.schedule("*/15 * * * *", ()=>console.log('Não foi possivel buscar dados do Mongodb...'));
     }
@@ -22,7 +22,16 @@ const cronScheduleToMysql = () =>{
 
 const cronScheduleReportAlerta = () =>{
     try {
-        cron.schedule("*/1 * * * *" , verificarAlerta)
+        cron.schedule("*/15 * * * *" , verificarAlerta)
+    } catch (error) {
+        console.log(error);
+        
+    }
+}
+
+const cronScheculeSendDataTests = () =>{
+    try {
+        cron.schedule("* * * * *" , enviarDados)
     } catch (error) {
         console.log(error);
         
@@ -55,11 +64,55 @@ const registrarMedida = async (ligacao: EstacaoHasParametros, dados) => {
     await medidaCollection.deleteOne({'_id': dados['_id']})
 }
 
+const enviarDados = async () => {
+    const dados = [
+        {
+            "uid":"083AF28F2BE0",
+            "temp":22.2,
+            "unx":"1683802641"
+        },
+        {
+            "uid":"083AF28F2BE0",
+            "umi":22.2,
+            "unx":"1683802641"
+        },
+        {
+            "uid":"083AF28F2BE0",
+            "pluv":22.2,
+            "unx":"1683802641"
+        },
+        {
+            "uid":"083AF28F2BE0",
+            "bat":22.2,
+            "unx":"1683802641"
+        }
+    ]
+    const result = await medidaCollection.insertMany(dados);
+}
+
+
+const buscarEstacaoHasParametros = async (dado, tipoParametro: string) => {
+    const estacao = await db.getRepository(Estacao).findOneBy({uid:dado.uid});
+    if(estacao){
+        const parametro = await db.getRepository(Parametro).findOneBy({tipo:tipoParametro});
+        const estacaoHasParametros = await db.getRepository(EstacaoHasParametros).findOne({
+            relations:{
+                alerta:true,
+                estacao:true,
+                parametro:true
+            },
+            where:{
+                estacao:estacao,
+                parametro:parametro            
+            }
+        })
+        return estacaoHasParametros
+    }
+}
 
 const tratarDados = async () =>{
     console.log('\nVerificando se existem medidas -', new Date().toLocaleString("pt-BR", {timeZone: "America/Sao_Paulo"}));
     const medidas = await buscarMedidas()
-    let contador = 0
     if(medidas.length > 0){
 
         const temp = medidas.filter((medida)=> medida.temp)
@@ -68,84 +121,38 @@ const tratarDados = async () =>{
         const bateria = medidas.filter((medida)=> medida.bat)
 
         temp.forEach(async el => {
-                const estacao = await db.getRepository(Estacao).findOneBy({uid:el.uid});
-                if(estacao){
-                    const parametro = await db.getRepository(Parametro).findOneBy({tipo:'Temperatura'})
-                    const estacaoHasParametros = await db.getRepository(EstacaoHasParametros).findOne({
-                        relations:{
-                            alerta:true,
-                            estacao:true,
-                            parametro:true
-                        },
-                        where:{
-                            estacao:estacao,
-                            parametro:parametro            
-                        }
-                    })
-                    console.log(estacao)
-                if (estacaoHasParametros){
-                    registrarMedida(estacaoHasParametros, el);
-                    contador ++
-                }
+            const estacaoHasParametros = await buscarEstacaoHasParametros(el, 'Temperatura');
+            if (estacaoHasParametros){
+                registrarMedida(estacaoHasParametros, el);
             }
-        })     
-        umi.forEach(async el => {
-            const estacaoHasUmidade = await db.getRepository(EstacaoHasParametros).createQueryBuilder("estacoes_has_parametros")
-                            .innerJoinAndSelect("estacoes_has_parametros.estacao", "estacoes" )
-                            .leftJoinAndSelect('estacoes_has_parametros.parametro', 'parametros')
-                            .where("estacoes.uid = :uid", {uid: el.uid})
-                            .andWhere('parametros.tipo = :tipo', {tipo: 'Umidade'})
-                            .getOne()
-            if (estacaoHasUmidade){
-                const medida = new Medida()
-                medida.valor_medido = el.umi
-                medida.estacao = estacaoHasUmidade.estacao 
-                medida.estacao_has_parametros = estacaoHasUmidade
-                medida.parametro = estacaoHasUmidade.parametro 
-                medida.unixtime = new Date(el.unx * 1000);
-                await db.getRepository(Medida).save(medida)
-                await medidaCollection.deleteOne({'_id': el['_id']})
-            }   
-        })
-        pluv.forEach(async el => {
-            const estacoesHasPluviometro = await db.getRepository(EstacaoHasParametros).createQueryBuilder("estacoes_has_parametros")
-                            .innerJoinAndSelect("estacoes_has_parametros.estacao", "estacoes" )
-                            .leftJoinAndSelect('estacoes_has_parametros.parametro', 'parametros')
-                            .where("estacoes.uid = :uid", {uid: el.uid})
-                            .andWhere('parametros.tipo = :tipo', {tipo: 'Pluviometro'})
-                            .getOne()
-            if (estacoesHasPluviometro){
-                const medida = new Medida()
-                medida.valor_medido = el.pluv
-                medida.estacao = estacoesHasPluviometro.estacao 
-                medida.estacao_has_parametros = estacoesHasPluviometro
-                medida.parametro = estacoesHasPluviometro.parametro 
-                medida.unixtime = new Date(el.unx * 1000);
-                await db.getRepository(Medida).save(medida)
-                await medidaCollection.deleteOne({'_id': el['_id']})
-            }     
         })    
-        bateria.forEach(async el => {
-            const estacoesHasBateria = await db.getRepository(EstacaoHasParametros).createQueryBuilder("estacoes_has_parametros")
-                            .innerJoinAndSelect("estacoes_has_parametros.estacao", "estacoes" )
-                            .leftJoinAndSelect('estacoes_has_parametros.parametro', 'parametros')
-                            .where("estacoes.uid = :uid", {uid: el.uid})
-                            .andWhere('parametros.tipo = :tipo', {tipo: 'Bateria'})
-                            .getOne()
-            if (estacoesHasBateria){
-                const medida = new Medida()
-                medida.valor_medido = el.bat
-                medida.estacao = estacoesHasBateria.estacao 
-                medida.estacao_has_parametros = estacoesHasBateria
-                medida.parametro = estacoesHasBateria.parametro 
-                medida.unixtime = new Date(el.unx * 1000);
-                await db.getRepository(Medida).save(medida)
-                await medidaCollection.deleteOne({'_id': el['_id']})
-            }             
+
+        umi.forEach(async el => {
+            const estacaoHasParametros = await buscarEstacaoHasParametros(el, 'Umidade');
+            if (estacaoHasParametros){
+                registrarMedida(estacaoHasParametros, el);
+                // contador ++
+            }  
         })
+
+        pluv.forEach(async el => {
+            const estacaoHasParametros = await buscarEstacaoHasParametros(el, 'Pluviometro');
+            if (estacaoHasParametros){
+                registrarMedida(estacaoHasParametros, el);
+                // contador ++
+            } 
+        })  
+
+        bateria.forEach(async el => {
+            const estacaoHasParametros = await buscarEstacaoHasParametros(el, 'Bateria');
+            if (estacaoHasParametros){
+                registrarMedida(estacaoHasParametros, el);
+                // contador ++
+            }
+        })
+
         console.log("\nMedidas exportadas do MongoDB para MySQL com sucesso! -", new Date().toLocaleString("pt-BR", {timeZone: "America/Sao_Paulo"}));
         if(medidas.length > 1){
-            console.log(contador)
             console.log(`${medidas.length} dados exportados`);
         }else{
             console.log(`${medidas.length} dado exportado`);
@@ -164,33 +171,32 @@ const verificarAlerta = async () => {
             parametro:true
         }
     })
-   
-   medidas.forEach(async medida => {
-    if(medida.alerta){
-         
-        if(medida.alerta.tipo == 'abaixo'){
-            console.log(medida);
-            
-           if(medida.valor_medido < medida.alerta.valor){
-                realizarReport(medida)
-           }else{
-                console.log("Não ativou");
-            
-            }
-        }
-        if(medida.alerta.tipo == 'acima'){
-            if(medida.valor_medido > medida.alerta.valor){
-               realizarReport(medida)
+
+    medidas.forEach(async medida => {
+        if(medida.alerta){
+            if(medida.alerta.tipo == 'abaixo'){
+                console.log(medida);
+                
+            if(medida.valor_medido < medida.alerta.valor){
+                    realizarReport(medida)
             }else{
-                console.log("Não ativou");
-            }   
+                    console.log("Não ativou");
+                
+                }
+            }
+            if(medida.alerta.tipo == 'acima'){
+                if(medida.valor_medido > medida.alerta.valor){
+                    realizarReport(medida)
+                }else{
+                    console.log("Não ativou");
+                }   
+            }
+        }else{
+            console.log("Não possui alerta");
+            
         }
-    }else{
-        console.log("Não possui alerta");
-        
-    }
-   })
+    })
 }
 
 
-export {cronScheduleToMysql, cronScheduleReportAlerta}
+export {cronScheduleToMysql, cronScheduleReportAlerta, cronScheculeSendDataTests}

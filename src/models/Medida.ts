@@ -16,6 +16,11 @@ class Medida{
     @Column({type:'float'})
     valor_medido: Double
 
+    @Column({
+        default:false
+    })
+    verificado: boolean
+
     @ManyToOne((type) => EstacaoHasParametros, {onDelete:"CASCADE"})
     @JoinColumn({
         name:"id_estacao_has_parametro",
