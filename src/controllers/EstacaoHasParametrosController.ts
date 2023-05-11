@@ -120,6 +120,22 @@ class EstacaoHasParametrosController {
         }
     }
 
+    public async excluirEHP(req: Request, res: Response){
+        try{
+            const id = Number(req.params.id)
+            const EHP = await db.getRepository(EstacaoHasParametros).findOneBy({id: id})
+            console.log(EHP)
+            if(EHP){
+                await db.createQueryBuilder().delete().from(EstacaoHasParametros).where("id=:id", {id}).execute();
+                res.status(200).json(`Relação Estação Parâmetro de id ${EHP.id} excluido com sucesso...`)
+            }else{
+                res.status(404).json(`Relação Estação Parâmetro de id ${req.params.id} não encontrada...`)
+            }
+        }catch(error){
+            res.status(500).json({ message: error });
+        }
+    };
+
 }
 
 export default new EstacaoHasParametrosController();
