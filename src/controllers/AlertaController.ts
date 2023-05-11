@@ -77,13 +77,30 @@ class AlertaController{
     public async vincularAlerta(req:Request, res:Response){
         try{
             const { id_estacao, id_parametro, id_alerta } = req.body;
+            const estacao = await db.getRepository(Estacao).findOneBy({id:id_estacao});
+            if(!estacao){
+                throw "Estação não econtrada..."
+            }
+            const parametro = await db.getRepository(Parametro).findOneBy({id:id_parametro});
+            if(!parametro){
+                throw "Parametro não encontrado..."
+            }
             const alerta = await db.getRepository(Alerta).findOne({where:{id:id_alerta}});
+            if(!alerta){
+                throw "Alerta não encontrado..."
+            }
             const estacao_has_parametros = await db.getRepository(EstacaoHasParametros).findOne({
                 where:{
-                    estacao: id_estacao,
-                    parametro: id_parametro
+                    estacao: estacao,
+                    parametro: parametro
+                },
+                relations:{
+                    alerta:true,
+                    parametro:true,
+                    estacao:true
                 }
             });
+            console.log(estacao_has_parametros)
             estacao_has_parametros.alerta = alerta;
             await db.getRepository(EstacaoHasParametros).save(estacao_has_parametros);
             res.json(estacao_has_parametros);

@@ -193,7 +193,6 @@ const verificarAlerta = async () => {
             }
         }else{
             console.log("Não possui alerta");
-            
         }
     })
 }
