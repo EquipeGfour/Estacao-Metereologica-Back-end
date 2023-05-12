@@ -22,7 +22,7 @@ const cronScheduleToMysql = () =>{
 
 const cronScheduleReportAlerta = () =>{
     try {
-        cron.schedule("*/15 * * * *" , verificarAlerta)
+        cron.schedule("* * * * *" , verificarAlerta)
     } catch (error) {
         console.log(error);
         
@@ -38,7 +38,8 @@ const cronScheculeSendDataTests = () =>{
     }
 }
 
-const realizarReport = async (medida) =>{
+const realizarReport = async (medida:Medida) =>{
+    
     const report = new RegistroAlerta()
     report.alerta = medida.alerta
     report.estacao = medida.estacao
@@ -49,8 +50,7 @@ const realizarReport = async (medida) =>{
     report.longitude = medida.estacao.longitude
     report.unixtime = medida.unixtime
     await db.getRepository(RegistroAlerta).save(report)
-}
-
+    }
 
 const registrarMedida = async (ligacao: EstacaoHasParametros, dados) => {
     const medida = new Medida()
@@ -89,7 +89,6 @@ const enviarDados = async () => {
     ]
     const result = await medidaCollection.insertMany(dados);
 }
-
 
 const buscarEstacaoHasParametros = async (dado, tipoParametro: string) => {
     const estacao = await db.getRepository(Estacao).findOneBy({uid:dado.uid});
@@ -150,7 +149,6 @@ const tratarDados = async () =>{
                 // contador ++
             }
         })
-
         console.log("\nMedidas exportadas do MongoDB para MySQL com sucesso! -", new Date().toLocaleString("pt-BR", {timeZone: "America/Sao_Paulo"}));
         if(medidas.length > 1){
             console.log(`${medidas.length} dados exportados`);
@@ -169,19 +167,23 @@ const verificarAlerta = async () => {
             estacao:true,
             estacao_has_parametros:true,
             parametro:true
+        },
+        where:{
+            verificado:false
         }
     })
-
     medidas.forEach(async medida => {
         if(medida.alerta){
+            if(medida.verificado == false){
+                medida.verificado = true
+                await db.getRepository(Medida).save(medida)
+            }
             if(medida.alerta.tipo == 'abaixo'){
-                console.log(medida);
-                
-            if(medida.valor_medido < medida.alerta.valor){
+            
+                if(medida.valor_medido < medida.alerta.valor){
                     realizarReport(medida)
-            }else{
+                }else{
                     console.log("Não ativou");
-                
                 }
             }
             if(medida.alerta.tipo == 'acima'){
