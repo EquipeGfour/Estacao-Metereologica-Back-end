@@ -44,6 +44,28 @@ class MedidaController{
         }
     };
 
+    public async buscarMedidasEstacao (req: Request, res: Response){
+        try{
+            const {id} = req.params
+            const dados = await db.getRepository(Medida).find({
+                where:{
+                    estacao:{
+                        id:Number(id)
+                    }
+                },
+                relations:{
+                    alerta:true,
+                    estacao:true,
+                    parametro:true,
+                    estacao_has_parametros:true
+                }
+            })
+            return res.json(dados);
+        }catch(error){
+            res.status(500).json({message: error}); 
+        }
+    }
+
     public async cadastrarMedidas(req: Request, res: Response){
         try{
 

@@ -8,6 +8,7 @@ import * as dotenv from "dotenv";
 import { Estacao, Parametro, RegistroAlerta } from './models';
 
 
+
 dotenv.config();
 const URI = process.env.URI || null;
 
@@ -68,25 +69,27 @@ const enviarDados = async () => {
     const dados = [
         {
             "uid":"083AF28F2BE0",
-            "temp":22.2,
+            "temp": Math.random() * (100 - 1) + 1,
             "unx":"1683802641"
         },
         {
             "uid":"083AF28F2BE0",
-            "umi":22.2,
+            "umi": Math.random() * (100 - 1) + 1,
             "unx":"1683802641"
         },
         {
             "uid":"083AF28F2BE0",
-            "pluv":22.2,
+            "pluv": Math.random() * (100 - 1) + 1,
             "unx":"1683802641"
         },
         {
             "uid":"083AF28F2BE0",
-            "bat":22.2,
+            "bat": Math.random() * (100 - 1) + 1,
             "unx":"1683802641"
         }
     ]
+    console.log("enviado - ", new Date().toLocaleString("pt-BR", {timeZone: "America/Sao_Paulo"}));
+    
     const result = await medidaCollection.insertMany(dados);
 }
 

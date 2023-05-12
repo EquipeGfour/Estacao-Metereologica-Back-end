@@ -33,7 +33,7 @@ if(URI){
 app.use(cors());
 app.use(routes);
 
-// cronScheduleToMysql();
+cronScheduleToMysql();
 cronScheduleReportAlerta();
 // descomente caso queira testar o recebimento das medidas 
 // cronScheculeSendDataTests();
