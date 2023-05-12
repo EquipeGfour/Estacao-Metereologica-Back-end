@@ -57,7 +57,6 @@ class MedidaController{
                     estacao:estacao
                 },
                 relations:{
-                    estacao:true,
                     parametro:true
                 }
             })
@@ -71,7 +70,11 @@ class MedidaController{
                 return acc
             }, {})
 
-            return res.json(result);
+            const dadosTratados = Object.keys(result).map(key => {
+                return {name: key, data: result[key].map(r => r.valor_medido)}
+            })
+
+            return res.json(dadosTratados);
         }catch(error){
             res.status(500).json({message: error}); 
         }
