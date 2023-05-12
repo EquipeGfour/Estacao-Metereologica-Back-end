@@ -1,6 +1,7 @@
 import db from "../config/db";
 import { Request, Response } from "express";
 import Medida from "../models/Medida";
+import { Estacao } from "../models";
 
 
 class MedidaController{
@@ -46,21 +47,31 @@ class MedidaController{
 
     public async buscarMedidasEstacao (req: Request, res: Response){
         try{
-            const {id} = req.params
+            const {id} = req.params;
+            const estacao = await db.getRepository(Estacao).findOneBy({id:Number(id)})
+            if(!estacao){
+                throw "Estação não encontrada..."
+            }
             const dados = await db.getRepository(Medida).find({
                 where:{
-                    estacao:{
-                        id:Number(id)
-                    }
+                    estacao:estacao
                 },
                 relations:{
-                    alerta:true,
                     estacao:true,
-                    parametro:true,
-                    estacao_has_parametros:true
+                    parametro:true
                 }
             })
-            return res.json(dados);
+
+            const result = dados.reduce((acc, cur) => {
+                if (acc[cur['parametro']['tipo']]) {
+                    acc[cur['parametro']['tipo']].push(cur)
+                } else {
+                    acc[cur['parametro']['tipo']] = [cur]
+                }
+                return acc
+            }, {})
+
+            return res.json(result);
         }catch(error){
             res.status(500).json({message: error}); 
         }
