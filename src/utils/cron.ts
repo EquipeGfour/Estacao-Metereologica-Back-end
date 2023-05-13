@@ -86,22 +86,22 @@ const enviarDados = async () => {
     const dados = [
         {
             "uid":"083AF28F2BE0",
-            "temp": parseFloat(Math.random() * (100 - 1) + 1 + "").toFixed(1),
+            "temp": parseFloat(Math.random() * (100 - 1) + 1 + "").toFixed(2),
             "unx": "1683802641"
         },
         {
             "uid":"083AF28F2BE0",
-            "umi": parseFloat(Math.random() * (100 - 1) + 1 + "").toFixed(1),
+            "umi": parseFloat(Math.random() * (100 - 1) + 1 + "").toFixed(2),
             "unx": "1683802641"
         },
         {
             "uid":"083AF28F2BE0",
-            "pluv": parseFloat(Math.random() * (100 - 1) + 1 + "").toFixed(1),
+            "pluv": parseFloat(Math.random() * (100 - 1) + 1 + "").toFixed(2),
             "unx": "1683802641"
         },
         {
             "uid":"083AF28F2BE0",
-            "bat": parseFloat(Math.random() * (100 - 1) + 1 + "").toFixed(1),
+            "bat": parseFloat(Math.random() * (100 - 1) + 1 + "").toFixed(2),
             "unx": "1683802641"
         }
     ]
@@ -142,6 +142,8 @@ const tratarDados = async () =>{
         temp.map(async el => {
             const estacaoHasParametros = await buscarEstacaoHasParametros(el, 'Temperatura');
             if (estacaoHasParametros){
+
+                el.temp = parseFloat("" + (el.temp/100)).toFixed(2)
                 await registrarMedida(estacaoHasParametros, el);
             }
         });   
