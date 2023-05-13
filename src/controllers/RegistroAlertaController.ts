@@ -1,12 +1,10 @@
 import db from "../config/db";
 import { Request, Response } from 'express';
-import RegistroAlerta from '../models/RegistroAlerta';
+import { RegistroAlerta } from '../models';
+
 
 
 class RegistroAlertaController{
-    // public registrarAlerta(dado){
-
-    // }
     public async buscarRegistros(req: Request, res: Response){
         try{
             const registros = await db.getRepository(RegistroAlerta).find({

@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
-export type TipoUsuario = "Admin" | "Usuario" | "Visitante"
+
+type TipoUsuario = "Admin" | "Usuario" | "Visitante";
 
 @Entity({name:'usuarios'})
 class Usuario{
@@ -10,7 +11,7 @@ class Usuario{
     @Column()
     nome:string
 
-    @Column()
+    @Column({unique:true})
     email:string
 
     @Column()

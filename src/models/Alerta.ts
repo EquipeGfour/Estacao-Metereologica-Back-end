@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Double, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 
 @Entity({name:'alertas'})
@@ -13,7 +13,10 @@ class Alerta{
     mensagem: string
 
     @Column()
-    condicao: string
+    tipo: string
+
+    @Column({type:"float"})
+    valor: Double
 
 }
 

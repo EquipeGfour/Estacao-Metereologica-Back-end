@@ -1,5 +1,6 @@
 import { Router } from "express";
-import ParametroController from "../controllers/ParametroController";
+import { ParametroController } from "../controllers";
+
 
 const routes = Router();
 

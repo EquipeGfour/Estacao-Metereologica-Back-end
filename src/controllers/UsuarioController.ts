@@ -1,6 +1,7 @@
 import db from "../config/db";
 import { Request, Response } from 'express';
-import Usuario from "../models/Usuario";
+import { Usuario } from "../models";
+
 
 
 class UsuarioController{
