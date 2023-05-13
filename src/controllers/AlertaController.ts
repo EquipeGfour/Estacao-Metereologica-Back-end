@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
 import db from '../config/db';
-import Alerta from '../models/Alerta';
-import Estacao from '../models/Estacao';
-import Parametro from '../models/Parametro';
-import EstacaoHasParametros from '../models/EstacaoHasParametros';
+// import Alerta from '../models/Alerta';
+// import Estacao from '../models/Estacao';
+// import Parametro from '../models/Parametro';
+// import EstacaoHasParametros from '../models/EstacaoHasParametros';
+import { Alerta, Estacao, Parametro, EstacaoHasParametros } from '../models'
 import { Like } from 'typeorm';
 
 
@@ -100,7 +101,6 @@ class AlertaController{
                     estacao:true
                 }
             });
-            console.log(estacao_has_parametros)
             estacao_has_parametros.alerta = alerta;
             await db.getRepository(EstacaoHasParametros).save(estacao_has_parametros);
             res.json(estacao_has_parametros);

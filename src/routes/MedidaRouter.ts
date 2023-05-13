@@ -1,5 +1,5 @@
 import { Router } from "express";
-import MedidaController from "../controllers/MedidaController";
+import { MedidaController } from "../controllers";
 
 
 const routes = Router();

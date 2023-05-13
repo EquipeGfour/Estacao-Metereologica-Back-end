@@ -1,5 +1,5 @@
 import { Router } from "express";
-import AlertaController from "../controllers/AlertaController";
+import { AlertaController } from "../controllers";
 
 
 const routes = Router();

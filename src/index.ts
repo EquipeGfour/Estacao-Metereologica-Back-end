@@ -4,7 +4,7 @@ import db from "./config/db";
 import routes from "./routes";
 import cors from "cors";
 import { connectMongoDb } from "./config/mongodb";
-import { cronScheculeSendDataTests, cronScheduleReportAlerta, cronScheduleToMysql } from "./cron";
+import { cronScheduleReportAlerta, cronScheduleToMysql } from "./utils/cron";
 
 
 dotenv.config();
@@ -35,7 +35,7 @@ app.use(routes);
 
 cronScheduleToMysql();
 cronScheduleReportAlerta();
-// descomente caso queira testar o recebimento das medidas 
-// cronScheculeSendDataTests();
+//descomente caso queira testar o recebimento das medidas 
+// cronScheculeSendMedidasDeTestes();
 
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}...`));

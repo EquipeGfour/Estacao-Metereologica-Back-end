@@ -1,5 +1,5 @@
 import { Router } from "express";
-import RegistroAlertaController from "../controllers/RegistroAlertaController";
+import {  RegistroAlertaController } from "../controllers";
 
 
 const routes = Router();

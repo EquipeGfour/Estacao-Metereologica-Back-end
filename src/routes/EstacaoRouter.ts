@@ -1,5 +1,6 @@
 import { Router } from "express";
-import EstacaoController from "../controllers/EstacaoController";
+import { EstacaoController } from "../controllers";
+
 
 const routes = Router();
 

@@ -1,7 +1,6 @@
 import db from "../config/db";
 import { Request, Response } from "express";
-import Medida from "../models/Medida";
-import { Estacao } from "../models";
+import { Medida, Estacao } from "../models";
 
 
 class MedidaController{
@@ -12,6 +11,9 @@ class MedidaController{
                     estacao:true,
                     parametro:true,
                     estacao_has_parametros:true
+                },
+                order:{
+                    unixtime:"DESC"
                 }
             });
             res.json(medidas)

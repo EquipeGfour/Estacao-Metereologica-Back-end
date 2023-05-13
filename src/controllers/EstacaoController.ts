@@ -1,6 +1,6 @@
 import db from "../config/db";
 import { Request, Response } from 'express';
-import Estacao from "../models/Estacao";
+import { Estacao } from "../models";
 import { Like } from "typeorm";
 
 
