@@ -1,6 +1,9 @@
 import db from "../config/db";
 import { Request, Response } from 'express';
-import Parametro from "../models/Parametro";
+import { Parametro } from "../models";
+import { Like } from 'typeorm';
+
+
 
 class ParametrosController{
     public async buscarParametros(req: Request, res: Response){
@@ -26,6 +29,27 @@ class ParametrosController{
             res.status(500).json({ message: error });
         }        
     };
+
+    public async buscarParametroPorTipoDescricao(req: Request, res: Response){
+        try{
+            const { busca } = req.params;
+            const parametros = await db.getRepository(Parametro).find({
+                where:[
+                    {
+                        tipo: Like (`%${busca}%`)
+                    },
+                    {
+                        descricao: Like (`%${busca}%`)
+                    }
+                ]
+            });
+            res.json(parametros);
+            console.log(busca);
+            
+        }catch(error){
+            res.status(500).json({message: error})
+        }
+    }
 
     public async CadastrarParametros(req: Request, res: Response){
         try{

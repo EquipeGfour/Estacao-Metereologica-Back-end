@@ -1,6 +1,7 @@
 import db from "../config/db";
 import { Request, Response } from 'express';
-import Estacao from "../models/Estacao";
+import { Estacao } from "../models";
+import { Like } from "typeorm";
 
 
 class EstacaoController {
@@ -27,6 +28,25 @@ class EstacaoController {
             res.status(500).json({ message: error});
         }
     };
+
+    public async buscarPorNomeEuid(req: Request, res: Response){
+        try{
+            const { busca } = req.params;
+            const estacao = await db.getRepository(Estacao).find({
+                where:[
+                    {
+                        nome: Like(`%${busca}%`)
+                    },
+                    {
+                        uid: Like(`%${busca}%`)
+                    }
+                ]
+            })
+            res.json(estacao);
+        }catch(error){
+            res.status(500).json({ message: error});
+        }
+    }
 
     public async cadastrarEstacao(req: Request, res: Response){
         try{
@@ -64,7 +84,7 @@ class EstacaoController {
                 const estacaoEditada = await db.manager.save(Estacao, estacao)
                 res.json({message: 'Estação editada com sucesso!', estacaoEditada})
             }else{
-                res.json(`Estação não encontrada.`)
+                res.status(500).json(`Estação não encontrada.`)
             }           
         }catch(error) {
             res.status(500).json({ message: error});
@@ -87,6 +107,39 @@ class EstacaoController {
             res.status(500).json({ message: error });
         }
     };
+
+
+    public async excluirEstacaoPorNome(req:Request, res: Response){
+        try{
+        const nome = String (req.params.nome);
+        const estacao = await db.getRepository(Estacao).findOneBy({nome:nome})
+        if(estacao){
+            await db.createQueryBuilder().delete().from(Estacao).where("nome=:nome", {nome}).execute();
+                res.status(200).json(`Estação de id ${estacao.nome} excluida com sucesso...`)
+            }else{
+                res.status(404).json(`Estação de id ${req.params.nome} não encontrada...`)
+            }
+        }catch(error){
+            res.status(500).json({ message: error });
+        }
+    };
+
+    public async desativarEstacao(req: Request, res: Response){
+        try{
+            const estacao = await db.getRepository(Estacao).findOneBy({id: Number(req.params.id)})
+            if(estacao){
+                if(estacao.status == 'ativo'){
+                    estacao.status = 'desativado'
+                }
+                const estacaoDesativada = await db.manager.save(Estacao, estacao)
+                res.json({message: 'Estação desativada com sucesso!', estacaoDesativada})
+            }else{
+                res.json(`Estação não encontrada`)
+            }
+        }catch(error){
+            res.status(500).json({ message: error })
+        }
+    }
 }
 
 export default new EstacaoController();

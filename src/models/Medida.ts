@@ -1,7 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate, ManyToMany, JoinTable, Double, ManyToOne, JoinColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, Double, ManyToOne, JoinColumn } from "typeorm";
 import EstacaoHasParametros from "./EstacaoHasParametros";
 import Estacao from "./Estacao";
 import Parametro from "./Parametro";
+import Alerta from "./Alerta";
 
 
 @Entity({name: 'medidas'})
@@ -15,25 +16,34 @@ class Medida{
     @Column({type:'float'})
     valor_medido: Double
 
-    @ManyToOne((type) => EstacaoHasParametros)
+    @Column({
+        default:false
+    })
+    verificado: boolean
+
+    @ManyToOne((type) => EstacaoHasParametros, {onDelete:"CASCADE"})
     @JoinColumn({
         name:"id_estacao_has_parametro",
         referencedColumnName:"id",
         foreignKeyConstraintName: "fk_medidas_estacao_has_parametro_id"
     })
-    id_estacao_has_parametros: EstacaoHasParametros
+    estacao_has_parametros: EstacaoHasParametros
 
-    @ManyToOne((type) => Estacao, (estacao) => estacao.id)
+    @ManyToOne((type) => Estacao, (estacao) => estacao.id, {onDelete:"CASCADE"})
     @JoinColumn({
         name:"id_estacao"
     })
-    id_estacao: Estacao
+    estacao: Estacao
 
-    @ManyToOne((type) => Parametro, (parametro) => parametro.id)
+    @ManyToOne((type) => Parametro, (parametro) => parametro.id, {onDelete:"CASCADE"})
     @JoinColumn({
         name:"id_parametro"
     })
-    id_parametro: Parametro
+    parametro: Parametro
+
+    @ManyToOne((type) => Alerta, (alerta) => alerta.id, {onDelete:"CASCADE"})
+    @JoinColumn({name:"id_alerta"})
+    alerta: Alerta
 }
 
 export default Medida

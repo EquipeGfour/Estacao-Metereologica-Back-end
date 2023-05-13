@@ -1,4 +1,4 @@
-import { PrimaryGeneratedColumn, Column, Entity, JoinColumn, ManyToOne } from "typeorm";
+import { PrimaryGeneratedColumn, Entity, JoinColumn, ManyToOne } from "typeorm";
 import Estacao from "./Estacao";
 import Parametro from "./Parametro";
 import Alerta from "./Alerta";
