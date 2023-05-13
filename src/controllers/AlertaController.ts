@@ -20,7 +20,7 @@ class AlertaController{
     public async buscarAlerta(req:Request, res:Response){
         try{
             const id = Number(req.params.id)
-            const alerta = await db.getRepository(Alerta).find({
+            const alerta = await db.getRepository(Alerta).findOne({
                 where:{
                     id: id
                 }

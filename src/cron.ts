@@ -23,7 +23,7 @@ const cronScheduleToMysql = () =>{
 
 const cronScheduleReportAlerta = () =>{
     try {
-        cron.schedule("* * * * *" , verificarAlerta)
+        cron.schedule("*/2 * * * *" , verificarAlerta)
     } catch (error) {
         console.log(error);
         
@@ -40,7 +40,6 @@ const cronScheculeSendDataTests = () =>{
 }
 
 const realizarReport = async (medida:Medida) =>{
-    
     const report = new RegistroAlerta()
     report.alerta = medida.alerta
     report.estacao = medida.estacao
@@ -51,7 +50,7 @@ const realizarReport = async (medida:Medida) =>{
     report.longitude = medida.estacao.longitude
     report.unixtime = medida.unixtime
     await db.getRepository(RegistroAlerta).save(report)
-    }
+}
 
 const registrarMedida = async (ligacao: EstacaoHasParametros, dados) => {
     const medida = new Medida()
@@ -182,8 +181,8 @@ const verificarAlerta = async () => {
                 await db.getRepository(Medida).save(medida)
             }
             if(medida.alerta.tipo == 'abaixo'){
-            
                 if(medida.valor_medido < medida.alerta.valor){
+                    console.log('aqi')
                     realizarReport(medida)
                 }else{
                     console.log("Não ativou");
