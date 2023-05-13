@@ -26,7 +26,6 @@ const cronScheduleReportAlerta = () =>{
         cron.schedule("*/5 * * * *" , verificarAlerta);
     } catch (error) {
         console.log(error);
-        
     }
 }
 
@@ -60,6 +59,26 @@ const registrarMedida = async (ligacao: EstacaoHasParametros, dados) => {
     medida.alerta = ligacao.alerta;
     medida.unixtime = new Date(dados.unx * 1000);
     await db.getRepository(Medida).save(medida);
+    // if(medida.alerta){
+    //     if(medida.verificado == false){
+    //         medida.verificado = true;
+    //         await db.getRepository(Medida).save(medida);
+    //     }
+    //     if(medida.alerta.tipo == 'abaixo'){
+    //         if(medida.valor_medido < medida.alerta.valor){
+    //             realizarReport(medida);
+    //         }else{
+    //             console.log("Não ativou");
+    //         }
+    //     }
+    //     if(medida.alerta.tipo == 'acima'){
+    //         if(medida.valor_medido > medida.alerta.valor){
+    //             realizarReport(medida);
+    //         }else{
+    //             console.log("Não ativou");
+    //         }   
+    //     }
+    // }
     await medidaCollection.deleteOne({'_id': dados['_id']});
 }
 

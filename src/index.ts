@@ -4,7 +4,7 @@ import db from "./config/db";
 import routes from "./routes";
 import cors from "cors";
 import { connectMongoDb } from "./config/mongodb";
-import { cronScheduleReportAlerta, cronScheduleToMysql } from "./utils/cron";
+import { cronScheculeSendMedidasDeTestes, cronScheduleReportAlerta, cronScheduleToMysql } from "./utils/cron";
 
 
 dotenv.config();
