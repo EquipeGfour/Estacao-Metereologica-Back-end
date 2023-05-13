@@ -142,7 +142,6 @@ const tratarDados = async () =>{
         temp.map(async el => {
             const estacaoHasParametros = await buscarEstacaoHasParametros(el, 'Temperatura');
             if (estacaoHasParametros){
-
                 el.temp = parseFloat("" + (el.temp/100)).toFixed(2)
                 await registrarMedida(estacaoHasParametros, el);
             }
@@ -151,6 +150,7 @@ const tratarDados = async () =>{
         umi.map(async el => {
             const estacaoHasParametros = await buscarEstacaoHasParametros(el, 'Umidade');
             if (estacaoHasParametros){
+                el.umi = parseFloat("" + (el.umi/100)).toFixed(2)
                 await registrarMedida(estacaoHasParametros, el);
             }  
         });
@@ -158,6 +158,7 @@ const tratarDados = async () =>{
         pluv.map(async el => {
             const estacaoHasParametros = await buscarEstacaoHasParametros(el, 'Pluviometro');
             if (estacaoHasParametros){
+                el.pluv = parseFloat("" + (el.pluv/100)).toFixed(2)
                 await registrarMedida(estacaoHasParametros, el);
             } 
         });  
@@ -165,6 +166,7 @@ const tratarDados = async () =>{
         bateria.map(async el => {
             const estacaoHasParametros = await buscarEstacaoHasParametros(el, 'Bateria');
             if (estacaoHasParametros){
+                el.bat = parseFloat("" + (el.bat/100)).toFixed(2)
                 await registrarMedida(estacaoHasParametros, el);
             }
         });
