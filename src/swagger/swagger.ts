@@ -9,6 +9,7 @@ const PORT = process.env.PORT || 5000
 const outputFile = './swagger_output.json';
 const endpointsFiles = ['./src/index.ts'];
 
+
 const doc = {
     info: {
         title: 'API - TecSUS',
