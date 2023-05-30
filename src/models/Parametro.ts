@@ -9,7 +9,7 @@ class Parametro{
     @Column()
     tipo:string
 
-    @Column()
+    @Column({length:400})
     descricao: string
 
     @Column()
@@ -23,4 +23,3 @@ class Parametro{
 }
 
 export default Parametro
-
