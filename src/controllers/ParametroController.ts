@@ -1,7 +1,9 @@
 import db from "../config/db";
 import { Request, Response } from 'express';
-import Parametro from "../models/Parametro";
+import { Parametro } from "../models";
 import { Like } from 'typeorm';
+
+
 
 class ParametrosController{
     public async buscarParametros(req: Request, res: Response){

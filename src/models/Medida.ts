@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate, ManyToMany, JoinTable, Double, ManyToOne, JoinColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, Double, ManyToOne, JoinColumn } from "typeorm";
 import EstacaoHasParametros from "./EstacaoHasParametros";
 import Estacao from "./Estacao";
 import Parametro from "./Parametro";

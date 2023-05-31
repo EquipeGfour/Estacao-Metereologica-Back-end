@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
 import db from '../config/db';
-import Alerta from '../models/Alerta';
-import Estacao from '../models/Estacao';
-import Parametro from '../models/Parametro';
-import EstacaoHasParametros from '../models/EstacaoHasParametros';
+// import Alerta from '../models/Alerta';
+// import Estacao from '../models/Estacao';
+// import Parametro from '../models/Parametro';
+// import EstacaoHasParametros from '../models/EstacaoHasParametros';
+import { Alerta, Estacao, Parametro, EstacaoHasParametros } from '../models'
 import { Like } from 'typeorm';
 
 
@@ -20,7 +21,7 @@ class AlertaController{
     public async buscarAlerta(req:Request, res:Response){
         try{
             const id = Number(req.params.id)
-            const alerta = await db.getRepository(Alerta).find({
+            const alerta = await db.getRepository(Alerta).findOne({
                 where:{
                     id: id
                 }
@@ -100,7 +101,6 @@ class AlertaController{
                     estacao:true
                 }
             });
-            console.log(estacao_has_parametros)
             estacao_has_parametros.alerta = alerta;
             await db.getRepository(EstacaoHasParametros).save(estacao_has_parametros);
             res.json(estacao_has_parametros);

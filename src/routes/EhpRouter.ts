@@ -1,5 +1,5 @@
 import { Router } from "express";
-import EstacaoHasParametrosController from "../controllers/EstacaoHasParametrosController";
+import { EstacaoHasParametrosController } from "../controllers";
 
 
 const routes = Router();

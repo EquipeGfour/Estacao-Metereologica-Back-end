@@ -6,7 +6,7 @@ import Alerta from "./AlertaRouter";
 import Usuario from "./UsuarioRouter";
 import RegistroAlerta from "./RegistroAlertaRouter";
 import Medida from "./MedidaRouter";
-import LoginController from "../controllers/LoginController";
+import { LoginController } from "../controllers";
 
 
 const routes = Router();
