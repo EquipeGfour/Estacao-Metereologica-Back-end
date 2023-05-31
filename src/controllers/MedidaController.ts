@@ -72,10 +72,8 @@ class MedidaController{
                 return acc
             }, {})
 
-            console.log(result)
-
             const dadosTratados = Object.keys(result).map(key => {
-                return {name: key, data: result[key].map(r => {return {value: r.valor_medido, date:r.unixtime}})}
+                return {name: key, data: result[key].map(r => {return {value: r.valor_medido, date:r.unixtime, unidade_medida: r.parametro.unidade_medida}})}
             })
 
             return res.json(dadosTratados);
