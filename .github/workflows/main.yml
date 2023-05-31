@@ -1,7 +1,7 @@
 name: Testes automatizados
 
 on:
-  push:
+  pull_request:
     branches:
       - main
       - dev

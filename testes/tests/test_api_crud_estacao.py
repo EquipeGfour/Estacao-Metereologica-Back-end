@@ -36,7 +36,6 @@ class TestApiCrudEstacao:
             "utc": "2023-03-16T17:30:00.000Z",
             "status": "ativo"
         }
-
         response = requests.post(URL_BASE + "/cadastrar", data=data)
         assert response.status_code == 500
 
