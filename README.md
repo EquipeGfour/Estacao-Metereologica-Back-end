@@ -27,6 +27,7 @@ npm install
 npm run start
 ```
 <br>
+
 ## Swagger
    
  [Documentação com toda a parte de rotas da aplicação, no site do Swaggerhub - Versão 1.0.0](https://app.swaggerhub.com/apis-docs/VINIZEUS2002/api-tec_sus/1.0.0)
