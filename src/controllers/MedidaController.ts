@@ -68,6 +68,10 @@ class MedidaController {
 
             const result = dados.reduce((acc, cur) => {
                 const parametroTipo = cur.parametro.tipo;
+                console.log(parametroTipo != 'Direcao do Vento')
+                if(parametroTipo == 'Direcao do Vento'){
+                    return acc
+                }
                 const medida = {
                     value: cur.valor_medido,
                     date: cur.unixtime,
@@ -89,6 +93,8 @@ class MedidaController {
                 }
                 return acc;
             }, {});
+
+            console.log(result)
 
             const dadosTratados: {
                 name: string;
@@ -130,12 +136,12 @@ class MedidaController {
         try{
             const id_estacao = req.params.id
             const medidas = await db.getRepository(Medida).query(`
-            SELECT sub.tipo, sub.valor_medido, sub.id, sub.unixtime
+            SELECT sub.tipo, sub.valor_medido, sub.id, sub.unixtime, sub.unidade_medida, sub.descricao
             FROM (
-              SELECT p.tipo, m.valor_medido, m.unixtime, m.id, ROW_NUMBER() OVER (PARTITION BY p.tipo ORDER BY m.unixtime DESC) AS rn
-              FROM medidas m
-              JOIN estacoes_has_parametros ehp ON m.id_estacao_has_parametro = ehp.id
-              JOIN parametros p ON ehp.id_parametro = p.id WHERE m.id_estacao = ${id_estacao}
+                SELECT p.tipo, p.unidade_medida, p.descricao, m.valor_medido, m.unixtime, m.id, ROW_NUMBER() OVER (PARTITION BY p.tipo ORDER BY m.unixtime DESC) AS rn
+                FROM medidas m
+                JOIN estacoes_has_parametros ehp ON m.id_estacao_has_parametro = ehp.id
+                JOIN parametros p ON ehp.id_parametro = p.id WHERE m.id_estacao = ${id_estacao}
             ) AS sub
             WHERE sub.rn = 1;
             `)
