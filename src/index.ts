@@ -5,7 +5,8 @@ import routes from "./routes";
 import cors from "cors";
 import { connectMongoDb } from "./config/mongodb";
 import { cronScheculeSendMedidasDeTestes, cronScheduleReportAlerta, cronScheduleToMysql } from "./utils/cron";
-
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from './swagger/swagger_output.json';
 
 dotenv.config();
 
@@ -22,7 +23,7 @@ db.initialize().then(async(connection)=> {
     console.error('Não foi possivel se conectar ao MySql, erro:', error);
 })
 
-
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 if(URI){
     connectMongoDb();
 }else{
@@ -34,7 +35,7 @@ app.use(cors());
 app.use(routes);
 
 cronScheduleToMysql();
-cronScheduleReportAlerta();
+// cronScheduleReportAlerta();
 //descomente caso queira testar o recebimento das medidas 
 // cronScheculeSendMedidasDeTestes();
 

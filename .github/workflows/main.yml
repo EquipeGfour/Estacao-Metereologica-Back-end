@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - dev
 
 jobs:
   testes:
@@ -45,8 +46,10 @@ jobs:
           CREATE DATABASE datalogger; \
           FLUSH PRIVILEGES;"
 
-      - name: Criar echo
-        run: echo "PASSWORD=password\nDATABASE=datalogger" > .env
+      - name: Criar arquivo .env
+        run: |
+          echo "PASSWORD=password" >> .env
+          echo "DATABASE=datalogger" >> .env
 
       - name: Instalar dependências Node.js
         run: npm install

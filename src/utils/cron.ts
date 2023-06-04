@@ -52,33 +52,33 @@ const realizarReport = async (medida:Medida) =>{
 
 const registrarMedida = async (ligacao: EstacaoHasParametros, dados) => {
     const medida = new Medida();
-    medida.valor_medido = dados.temp || dados.umi || dados.pluv || dados.bat;
+    medida.valor_medido = dados.temp || dados.umi || dados.pluv || dados.bat || dados.wspeed || dados.wdirection;
     medida.estacao = ligacao.estacao ;
     medida.estacao_has_parametros = ligacao;
     medida.parametro = ligacao.parametro;
     medida.alerta = ligacao.alerta;
     medida.unixtime = new Date(dados.unx * 1000);
     await db.getRepository(Medida).save(medida);
-    // if(medida.alerta){
-    //     if(medida.verificado == false){
-    //         medida.verificado = true;
-    //         await db.getRepository(Medida).save(medida);
-    //     }
-    //     if(medida.alerta.tipo == 'abaixo'){
-    //         if(medida.valor_medido < medida.alerta.valor){
-    //             realizarReport(medida);
-    //         }else{
-    //             console.log("Não ativou");
-    //         }
-    //     }
-    //     if(medida.alerta.tipo == 'acima'){
-    //         if(medida.valor_medido > medida.alerta.valor){
-    //             realizarReport(medida);
-    //         }else{
-    //             console.log("Não ativou");
-    //         }   
-    //     }
-    // }
+    if(medida.alerta){
+        if(medida.verificado == false){
+            medida.verificado = true;
+            await db.getRepository(Medida).save(medida);
+        }
+        if(medida.alerta.tipo == 'abaixo'){
+            if(medida.valor_medido < medida.alerta.valor){
+                realizarReport(medida);
+            }else{
+                console.log("Não ativou");
+            }
+        }
+        if(medida.alerta.tipo == 'acima'){
+            if(medida.valor_medido > medida.alerta.valor){
+                realizarReport(medida);
+            }else{
+                console.log("Não ativou");
+            }   
+        }
+    }
     await medidaCollection.deleteOne({'_id': dados['_id']});
 }
 
@@ -133,16 +133,17 @@ const tratarDados = async () =>{
     console.log('\nVerificando se existem medidas -', new Date().toLocaleString("pt-BR", {timeZone: "America/Sao_Paulo"}));
     const medidas = await buscarMedidas();
     if(medidas.length > 0){
-
+        console.log(medidas)
         const temp = medidas.filter((medida)=> medida.temp);
         const umi = medidas.filter((medida)=> medida.umi);
         const pluv = medidas.filter((medida)=> medida.pluv);
         const bateria = medidas.filter((medida)=> medida.bat);
+        const wSpeed = medidas.filter((medida)=> medida.wspeed);
+        const wDirection = medidas.filter((medida)=> medida.wdirection);
 
         temp.map(async el => {
             const estacaoHasParametros = await buscarEstacaoHasParametros(el, 'Temperatura');
             if (estacaoHasParametros){
-                el.temp = parseFloat("" + (el.temp/100)).toFixed(2)
                 await registrarMedida(estacaoHasParametros, el);
             }
         });   
@@ -150,7 +151,6 @@ const tratarDados = async () =>{
         umi.map(async el => {
             const estacaoHasParametros = await buscarEstacaoHasParametros(el, 'Umidade');
             if (estacaoHasParametros){
-                el.umi = parseFloat("" + (el.umi/100)).toFixed(2)
                 await registrarMedida(estacaoHasParametros, el);
             }  
         });
@@ -158,7 +158,8 @@ const tratarDados = async () =>{
         pluv.map(async el => {
             const estacaoHasParametros = await buscarEstacaoHasParametros(el, 'Pluviometro');
             if (estacaoHasParametros){
-                el.pluv = parseFloat("" + (el.pluv/100)).toFixed(2)
+                console.log(el)
+                // el.pluv = parseFloat("" + (el.pluv*0.25)).toFixed(2)
                 await registrarMedida(estacaoHasParametros, el);
             } 
         });  
@@ -166,7 +167,20 @@ const tratarDados = async () =>{
         bateria.map(async el => {
             const estacaoHasParametros = await buscarEstacaoHasParametros(el, 'Bateria');
             if (estacaoHasParametros){
-                el.bat = parseFloat("" + (el.bat/100)).toFixed(2)
+                await registrarMedida(estacaoHasParametros, el);
+            }
+        });
+
+        wSpeed.map(async el => {
+            const estacaoHasParametros = await buscarEstacaoHasParametros(el, 'Velocidade do Vento');
+            if (estacaoHasParametros){
+                await registrarMedida(estacaoHasParametros, el);
+            }
+        });
+
+        wDirection.map(async el => {
+            const estacaoHasParametros = await buscarEstacaoHasParametros(el, 'Direcao do Vento');
+            if (estacaoHasParametros){
                 await registrarMedida(estacaoHasParametros, el);
             }
         });
