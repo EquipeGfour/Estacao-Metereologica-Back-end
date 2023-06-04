@@ -159,7 +159,7 @@ const tratarDados = async () =>{
             const estacaoHasParametros = await buscarEstacaoHasParametros(el, 'Pluviometro');
             if (estacaoHasParametros){
                 console.log(el)
-                el.pluv = parseFloat("" + (el.pluv*0.25)).toFixed(2)
+                // el.pluv = parseFloat("" + (el.pluv*0.25)).toFixed(2)
                 await registrarMedida(estacaoHasParametros, el);
             } 
         });  

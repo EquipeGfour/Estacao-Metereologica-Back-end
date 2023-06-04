@@ -47,6 +47,9 @@ class MedidaController {
         }
     };
 
+
+    // 10, 11, 11, 15, 15, 15
+    // [0, 1, 0, 4, 0, 0]
     public async buscarMedidasEstacao(req: Request, res: Response) {
         try {
             const { id } = req.params;
@@ -68,7 +71,7 @@ class MedidaController {
 
             const result = dados.reduce((acc, cur) => {
                 const parametroTipo = cur.parametro.tipo;
-                console.log(parametroTipo != 'Direcao do Vento')
+
                 if(parametroTipo == 'Direcao do Vento'){
                     return acc
                 }
@@ -93,8 +96,7 @@ class MedidaController {
                 }
                 return acc;
             }, {});
-
-            console.log(result)
+            //console.log(result)
 
             const dadosTratados: {
                 name: string;
@@ -109,7 +111,13 @@ class MedidaController {
             if (dadosTratados.find((d) => d.name === 'Pluviometro')) {
                 const pluviometroData = dadosTratados.find((d) => d.name === 'Pluviometro').data;
                 const pluviometroValues = pluviometroData.map((d) => d.value);
-                const pluviometroDifferences = pluviometroValues.map((value, index) => {
+                const pluviometroDifferences = pluviometroValues.filter((value, index)=> {
+                    if (index > 0) {
+                        return value - pluviometroValues[index - 1] >= 0;
+                    } else {
+                        return true;
+                    }
+                }).map((value, index) => {
                     if (index > 0) {
                         return value - pluviometroValues[index - 1];
                     } else {
@@ -121,7 +129,6 @@ class MedidaController {
                     date: dadosTratados.find((d) => d.name === 'Pluviometro').data[index].date,
                     unidade_medida: 'mm',
                 }));
-
 
             }
 
