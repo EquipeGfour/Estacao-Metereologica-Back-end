@@ -35,7 +35,7 @@ app.use(cors());
 app.use(routes);
 
 cronScheduleToMysql();
-cronScheduleReportAlerta();
+// cronScheduleReportAlerta();
 //descomente caso queira testar o recebimento das medidas 
 // cronScheculeSendMedidasDeTestes();
 
