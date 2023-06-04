@@ -123,35 +123,28 @@ class MedidaController {
         } catch (error) {
             res.status(500).json({ message: error });
         }
+
     }
 
-
-    public async cadastrarMedidas(req: Request, res: Response) {
-        try {
-
-        } catch (error) {
-            console.log(error);
-            res.status(500).json({ message: error });
-        }
-    };
-
-    public async editarMedidas(req: Request, res: Response) {
-        try {
-
-        } catch (error) {
-            console.log(error);
-            res.status(500).json({ message: error });
-        }
-    };
-
-    public async excluirMedidas(req: Request, res: Response) {
-        try {
-
-        } catch (error) {
-            console.log(error);
+    public async buscarUltimasMedidasRegistradas(req: Request, res: Response){
+        try{
+            const id_estacao = req.params.id
+            const medidas = await db.getRepository(Medida).query(`
+            SELECT sub.tipo, sub.valor_medido, sub.id, sub.unixtime
+            FROM (
+              SELECT p.tipo, m.valor_medido, m.unixtime, m.id, ROW_NUMBER() OVER (PARTITION BY p.tipo ORDER BY m.unixtime DESC) AS rn
+              FROM medidas m
+              JOIN estacoes_has_parametros ehp ON m.id_estacao_has_parametro = ehp.id
+              JOIN parametros p ON ehp.id_parametro = p.id WHERE m.id_estacao = ${id_estacao}
+            ) AS sub
+            WHERE sub.rn = 1;
+            `)
+            res.status(200).json(medidas);
+        }catch(error){
             res.status(500).json({ message: error });
         }
     }
+
 }
 
 export default new MedidaController()
