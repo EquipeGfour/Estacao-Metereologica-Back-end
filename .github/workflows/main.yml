@@ -71,7 +71,7 @@ jobs:
 
     steps:
       - name: Teste
-        run: echo "O valor do segredo é: ${{ secrets.AWS_KEY }}"
+        run: echo "${{ secrets.AWS_KEY }}"
       - name: Cirar arquivo
         run: touch api-estacao-meteorologica.pem
       - name: Criando chave da AWS
