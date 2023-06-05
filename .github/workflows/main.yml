@@ -64,17 +64,13 @@ jobs:
       - name: Executar pytest
         run: pytest
 
-
-name: Deploy
-
-on:
-  push:
-    branches:
-      - deploy
-
-jobs:
   deploy:
-    - name: Deploy da aplicação
+    name: Deploy
+    on:
+      push:
+        branches:
+          - deploy
+
     runs-on: ubuntu-latest
 
     steps:
