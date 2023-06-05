@@ -64,6 +64,14 @@ jobs:
       - name: Executar pytest
         run: pytest
 
+
+name: Deploy
+
+on:
+  push:
+    branches:
+      - deploy
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
