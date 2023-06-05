@@ -1,0 +1,88 @@
+- hosts: terraform-ansible
+  tasks:
+    # - name: "Copiando novos arquivos do projeto"
+    #   shell: scp -i api-estacao-meteorologica.pem a_teste.txt ubuntu@ec2-34-211-225-156.us-west-2.compute.amazonaws.com:/home/ubuntu/api
+
+  #   - name: "Install node repo"
+  #     shell: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+    # - name: "Load nvm environment"
+    #   shell: source ~/.nvm/nvm.sh && nvm install node
+    #   args:
+    #     executable: /bin/bash
+    - name: "Parando serviço do backend"
+      shell: sudo systemctl stop backend.service
+    - name: "- hosts: terraform-ansible
+  tasks:
+    # - name: "Copiando novos arquivos do projeto"
+    #   shell: scp -i api-estacao-meteorologica.pem a_teste.txt ubuntu@ec2-34-211-225-156.us-west-2.compute.amazonaws.com:/home/ubuntu/api
+
+  #   - name: "Install node repo"
+  #     shell: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+    # - name: "Load nvm environment"
+    #   shell: source ~/.nvm/nvm.sh && nvm install node
+    #   args:
+    #     executable: /bin/bash
+    - name: "Parando serviço do backend"
+      shell: sudo systemctl stop backend.service
+    - name: "excluindo repositorio caso exista"
+      shell: sudo rm -rf api/
+    - name: "criando repositorio"
+      shell: sudo mkdir api
+      become: true
+    - name: "Clonando repositorio..."
+      shell: sudo git clone https://github.com/EquipeGfour/Estacao-Metereologica-Back-end.git /home/ubuntu/api/
+    - name: Instalando dependências do Projeto
+      become: true
+      shell: "cd /home/ubuntu/api && /home/ubuntu/.nvm/versions/node/v20.2.0/bin/node /home/ubuntu/.nvm/versions/node/v20.2.0/bin/npm i && git checkout dev"
+    - name: "Criando arquivo .env"
+      shell: cd /home/ubuntu/api && sudo sh -c 'echo "PASSWORD=password\nDATABASE=datalogger" > .env'
+    - name: "rodando aplicação"
+      shell: sudo systemctl start backend.service
+excluindo repositorio caso exista"
+      shell: sudo rm -rf api/
+    - name: "criando repositorio"
+      shell: sudo mkdir api
+      become: true
+    - name: "Clonando repositorio..."
+      shell: sudo git clone https://github.com/EquipeGfour/Estacao-Metereologica-Back-end.git /home/ubuntu/api/
+    - name: Instalando dependências do Projeto
+      become: true
+      shell: "cd /home/ubuntu/api && /home/ubuntu/.nvm/versions/node/v20.2.0/bin/node /home/ubuntu/.nvm/versions/node/v20.2.0/bin/npm i && git checkout dev"
+    - name: "Criando arquivo .env"
+      shell: cd /home/ubuntu/api && sudo sh -c 'echo "PASSWORD=password\nDATABASE=datalogger" > .env'
+    - name: "rodando aplicação"
+      shell: sudo systemctl start backend.service
+
+
+# sudo ansible-playbook playbook.yml -u ubuntu --private-key api-estacao-meteorologica.pem -i hosts.yml
+
+
+
+
+    #   shell: cd /home/ubuntu/api && npm run dev
+    #   become: true
+
+
+
+    # - name: "atualizando o repositorio"
+    #   shell: cd /home/ubuntu/api && git pull
+
+    # - name: "iniciando projeto"
+    #   shell: cd /home/ubuntu/api && nohup npm run dev > /dev/null 2>&1 &
+
+
+# mysql -h localhost -u root -p password
+
+# para instalar o ansible
+
+# sudo apt update
+# sudo apt install software-properties-common
+# sudo add-apt-repository --yes --update ppa:ansible/ansible
+# sudo apt-get install ansible
+
+
+# entrar na maquina
+# ssh -i "api-estacao-meteorologica.pem" ubuntu@ec2-35-161-181-93.us-west-2.compute.amazonaws.com
+
+# comando para clonar os arquivos para o ec2
+# sudo scp -i api-estacao-meteorologica.pem hosts.yml ubuntu@ec2-34-211-225-156.us-west-2.compute.amazonaws.com:/home/ubuntu/api

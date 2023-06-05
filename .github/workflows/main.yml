@@ -62,3 +62,14 @@ jobs:
 
       - name: Executar pytest
         run: pytest
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Criando chave da AWS
+        uses: echo ${{secrets.AWS_KEY}} >> api-estacao-meteorologica.pem
+
+      - name: Iniciando deploy
+        uses: sudo ansible-playbook playbook.yml -u ubuntu --private-key api-estacao-meteorologica.pem -i hosts.yml
