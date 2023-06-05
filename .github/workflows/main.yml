@@ -74,6 +74,7 @@ on:
 
 jobs:
   deploy:
+  name: Deploy da aplicacão
     runs-on: ubuntu-latest
 
     steps:
