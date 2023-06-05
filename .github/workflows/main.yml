@@ -64,26 +64,16 @@ jobs:
       - name: Executar pytest
         run: pytest
 
-name: Deploy
-
-on:
-  push:
-    branches:
-      - deploy
-
-jobs:
   deploy:
+    name: Deploy
+    if: github.ref == 'refs/heads/deploy'
     runs-on: ubuntu-latest
 
     steps:
-      - name: Instalar Ansible
-        run: sudo apt update && sudo apt install -y ansible
-
-      - name: Criar arquivo
+      - name: Cirar arquivo
         run: touch api-estacao-meteorologica.pem
-
       - name: Criando chave da AWS
-        run: echo "${{ secrets.AWS_KEY }}" > api-estacao-meteorologica.pem
+        run: echo ${{secrets.AWS_KEY}} >> api-estacao-meteorologica.pem
 
       - name: Iniciando deploy
-        run: ansible-playbook playbook.yml -u ubuntu --private-key api-estacao-meteorologica.pem -i hosts.yml
+        run: sudo ansible-playbook playbook.yml -u ubuntu --private-key api-estacao-meteorologica.pem -i hosts.yml
