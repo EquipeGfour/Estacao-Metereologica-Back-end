@@ -70,6 +70,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Cirar arquivo
+        run: touch api-estacao-meteorologica.pem
       - name: Criando chave da AWS
         run: echo ${{secrets.AWS_KEY}} >> api-estacao-meteorologica.pem
 
